@@ -1,10 +1,10 @@
 module.exports = {
   // 服务端端口，需要与disqus-proxy前端设置一致
-  port: 3000,
+  port: 5050,
 
-  api_key: '5Q2Sxxk5WInPOlTllkJKdswsl7M4vtWiY0QrRKXIHtBeJl4YWPa0vbay49KFvQa6',
+  api_key: '',
   // 你的diqus secret key
-  api_secret: 'mfB2znq0vL6lZHfzrZYvXMzZtjAyrrpDz4Qt2bQQ27DDAoxEVIB3p3P807LGdNZu',
+  api_secret: '',
 
   // 你的disqus名称
   username: 'szhshp',
