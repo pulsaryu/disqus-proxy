@@ -7,7 +7,7 @@ module.exports = {
   api_secret: 'mfB2znq0vL6lZHfzrZYvXMzZtjAyrrpDz4Qt2bQQ27DDAoxEVIB3p3P807LGdNZu',
 
   // 你的disqus名称
-  username: 'ciqu',
+  username: 'szhshp',
 
   // 服务端socks5代理转发，便于在本地测试，生产环境通常为null
   // socks5Proxy: {
