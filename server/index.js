@@ -58,6 +58,29 @@ router.get('/api/getThreads', async function (ctx) {
   ctx.body = result
 })
 
+
+router.get('/api/listPosts', async function (ctx) {
+  logger.info('Get Comments with identifier: ' + ctx.request.query.identifier)
+  let result
+
+  try {
+    result = await rq(Object.assign(req, {
+      method: 'GET',
+      url: 'https://disqus.com/api/3.0/forums/listPosts.json?' +
+      'api_key=' + config.api_key +
+      '&forum=' + config.username +
+      '&limit=12',
+      json: true
+    }))
+  } catch (e) {
+    ctx.body = e.error
+    logger.error('Error when get comment:' + JSON.stringify(e.error))
+    return
+  }
+  logger.info('Get comments successfully with response code: ' + result.code)
+  ctx.body = result
+})
+
 router.get('/api/getComments', async function (ctx) {
   logger.info('Get Comments with identifier: ' + ctx.request.query.identifier)
   let result
