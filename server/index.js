@@ -91,6 +91,7 @@ router.get('/api/getComments', async function (ctx) {
       url: 'https://disqus.com/api/3.0/threads/listPosts.json?' +
       'api_secret=' + config.api_secret +
       '&forum=' + config.username +
+      '&limit=' + 100 +
       // '&thread:ident=' + ctx.request.query.identifier,
       // 此处如果不对identifier encode, 如果identifier中含有中文，disqus api会不识别报错
       '&thread:ident=' + encodeURIComponent(ctx.request.query.identifier),
