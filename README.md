@@ -13,11 +13,17 @@
 - 评论层级回复样式
    
    ![]( http://7sbmib.com1.z0.glb.clouddn.com/post/disqusrebuild2/Image%20030.png  )
-   
+
+- 评论分页功能
+
+   ![]( http://7sbmib.com1.z0.glb.clouddn.com/post/newdisqusplugin/%E5%9B%BE%E5%83%8F%20005.png )
+
 ------
 
 
 ## 使用方法
+
+[repo链接](https://github.com/szhielelp/disqus-proxy)
 
 >首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
 
@@ -28,6 +34,10 @@
 ```html
     <!-- 必须提供一个 id 完全相同的 div -->
     <div id="disqus_thread"></div>
+
+    <!-- 一些元素用到了 FA 的 icon, 这一段可以放到 header 里面 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
     <script>
       window.disqusProxy = {
@@ -41,11 +51,11 @@
         this.page.identifier = window.location.href;
       };
       var s = document.createElement('script');
-      s.src = '/static/js/main.09c31d67.js'; //引用本项目里面的 static 文件夹下面的 JS
+      s.src = '/static/js/main.09c31d67.js'; //引用 static 文件夹下面的 JS
       s.async = true;
       document.body.appendChild(s);
     </script>
-    <!-- 引用本项目里面的 static 文件夹下面的 CSS -->
+    <!-- 引用 static 文件夹下面的 CSS -->
     <link rel="stylesheet" href="/static/css/main.331fc925.css"> 
 ```
 
@@ -123,6 +133,4 @@ forever stopall
 ```
 npm run-script build
 ```
-
-
 
