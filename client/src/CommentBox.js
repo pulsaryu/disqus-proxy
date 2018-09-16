@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Container, Row, Col, Card, CardBody, InputGroup, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
+import { Container, Row, Col, Card, CardBody, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
 import renderHTML from 'react-render-html';
 
 
@@ -15,6 +15,7 @@ class CommentBox extends Component {
       email: '',
       content: '',
       msg: '',
+      openAboutPage: false,
     }
   }
 
@@ -39,6 +40,12 @@ class CommentBox extends Component {
       name: e.target.value,
     });
   };
+
+  toggleAboutPage(e){
+    this.setState({
+      openAboutPage: !this.state.openAboutPage,
+    });
+  }
 
   postComment(e){
     const { email, name, content } = this.state;
@@ -98,7 +105,8 @@ class CommentBox extends Component {
         <Col>
           <Card>
             <CardHeader className="p-1 small">
-              留言板
+              <span style={{fontSize: '1rem'}}>留言板</span>
+              <Button color="link" className="pull-right p-0" onClick={this.toggleAboutPage.bind(this)}>关于</Button>
             </CardHeader>
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1" size="small">
@@ -113,18 +121,18 @@ class CommentBox extends Component {
                   </InputGroupText>
                 </InputGroupAddon>
               }
-                <Input type="text" id="comment-input-name" placeholder="Your Name" className="form-control form-control-sm" value={this.state.name} onChange={this.nameOnChange.bind(this)}/>
-                <Input type="email" id="comment-input-name" placeholder="Your Email" className="form-control form-control-sm" value={this.state.email} onChange={this.emailOnChange.bind(this)}/>
+                <Input type="text" placeholder="Your Name" className="form-control form-control-sm" value={this.state.name} onChange={this.nameOnChange.bind(this)}/>
+                <Input type="email" placeholder="Your Email" className="form-control form-control-sm" value={this.state.email} onChange={this.emailOnChange.bind(this)}/>
               </InputGroup>
               <Row className="m-0 p-0">
                 <Col className="d-flex m-0 p-1 border-0">
-                  <textarea className="form-control p-2 m-0" id="comment-input-content" onChange={this.contentOnChange.bind(this)} value={this.state.content}></textarea>
+                  <textarea className="form-control p-2 m-0" onChange={this.contentOnChange.bind(this)} value={this.state.content}></textarea>
                 </Col>
               </Row>
             </CardBody>
             <div className="card-footer text-muted m-0 p-0 form-group">
-              <span id="comment-msg" className="small text-danger"></span>
-              <button type="button" className="comment-btn btn btn-secondary btn-sm pull-right m-1" id="comment-send" onClick={this.postComment.bind(this)}>Post</button>
+              <span className="small text-danger"></span>
+              <button type="button" className="comment-btn btn btn-secondary btn-sm pull-right m-1" onClick={this.postComment.bind(this)}>Post</button>
               {
                 this.props.replyToCommentObj &&
                 <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={this.cancelOnClick.bind(this)}>Cancel</button>
@@ -138,6 +146,17 @@ class CommentBox extends Component {
               {this.state.msg}
             </Alert>
           }
+          <Modal isOpen={this.state.openAboutPage}>
+            <ModalHeader>关于</ModalHeader>
+            <ModalBody>
+              <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github Repo</a>
+              <br/>
+              <a target="_blank" rel="noopener noreferrer" href="http://szhshp.org/tech/2018/09/16/disqusrebuild2.html">使用指导</a>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggleAboutPage.bind(this)}>OK</Button>
+            </ModalFooter>
+          </Modal>
         </Col>
       </Row>
     );
