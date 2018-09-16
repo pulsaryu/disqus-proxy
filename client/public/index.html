@@ -9,7 +9,6 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script>
@@ -19,8 +18,8 @@
         port: 5050,
         defaultAvatar: '/img/default-avatar.png',
         adminAvatar: 'http://comic.szhshp.org/comic/10101/headshot/0 (2).png',
-        identifier: window.location.href.replace('localhost:4000','szhshp.org')
-      };
+        identifier: window.location.href,
+      }
     </script>
 
 

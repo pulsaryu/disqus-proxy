@@ -28,22 +28,17 @@ class App extends Component {
   }
   
   render() {
-    console.log(this.state)
     return (
       <div className="App">
         {
-          (this.state.disqusLoaded === null) &&
+          (this.state.disqusLoaded == null) &&
           <div>
             <i className="fa fa-circle-o-notch fa-spin"></i>
             Loading Disqus...
           </div>  
         }
         {
-          (this.state.disqusLoaded === true) &&
-          <div> TODO: add native disqus</div>
-        }
-        {
-          (this.state.disqusLoaded === false) &&
+          (this.state.disqusLoaded == false) &&
           <DisqusProxy/>
         }
       </div>
