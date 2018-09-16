@@ -48,7 +48,7 @@ class DisqusProxy extends Component {
   
   render() {
     return (
-      <Container>
+      <div className="p-1">
         { 
           (this.state.commentsLoaded == true) 
             &&
@@ -65,7 +65,7 @@ class DisqusProxy extends Component {
             <Col>Error</Col>
           </Row>
         }
-      </Container>
+      </div>
     );
   }
 }
