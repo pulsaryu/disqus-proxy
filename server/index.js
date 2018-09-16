@@ -7,7 +7,6 @@ const log4js = require('log4js')
 const logger = log4js.getLogger('disqus-proxy')
 const cors = require('kcors')
 const config = require('./config')
-// const config = require('./my-config')
 
 if (config.log === 'file') {
   log4js.configure({
@@ -45,7 +44,6 @@ router.get('/api/getThreads', async function (ctx) {
       'api_secret=' + config.api_secret +
       '&forum=' + config.username +
       // '&thread:ident=' + ctx.request.query.identifier,
-      // 此处如果不对identifier encode, 如果identifier中含有中文，disqus api会不识别报错
       '&thread:ident=' + encodeURIComponent(ctx.request.query.identifier),
       json: true
     }))
@@ -91,9 +89,8 @@ router.get('/api/getComments', async function (ctx) {
       url: 'https://disqus.com/api/3.0/threads/listPosts.json?' +
       'api_secret=' + config.api_secret +
       '&forum=' + config.username +
-      '&limit=' + 100 +
+      '&limit=' + 500 +
       // '&thread:ident=' + ctx.request.query.identifier,
-      // 此处如果不对identifier encode, 如果identifier中含有中文，disqus api会不识别报错
       '&thread:ident=' + encodeURIComponent(ctx.request.query.identifier),
       json: true
     }))
