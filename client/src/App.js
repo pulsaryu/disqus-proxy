@@ -12,6 +12,10 @@ class App extends Component {
 
   componentDidMount(){
     const s = document.createElement('script')
+    if (window.disqusProxy.debug) {
+      this.setState({disqusLoaded: false});
+      return;
+    }
     const username = window.disqusProxy.username;
     s.src = `https://${username}.disqus.com/embed.js`
     s.async = true

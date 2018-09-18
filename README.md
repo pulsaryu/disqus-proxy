@@ -1,6 +1,10 @@
 # Disqus-Proxy
 
+>
+>这个项目应该只有墙内的和平民众会使用, 所以我也不准备多语言的功能啦
+>
 >[ 使用参考以及测试页面](http://szhshp.org/tech/2018/09/16/disqusrebuild2.html)
+>
 
 
 ## 样式截图
@@ -8,15 +12,15 @@
 ------
 - 评论框样式
    
-   ![]( http://7sbmib.com1.z0.glb.clouddn.com/post/disqusrebuild2/Image%20028.png  )
+   ![]( https://i.postimg.cc/mrqknRWX/Image_036.png  )
    
 - 评论层级回复样式
    
-   ![]( http://7sbmib.com1.z0.glb.clouddn.com/post/disqusrebuild2/Image%20030.png  )
+   ![]( https://i.postimg.cc/4yRdJ5dp/Image_037.png  )
 
 - 评论分页功能
 
-   ![]( http://7sbmib.com1.z0.glb.clouddn.com/post/newdisqusplugin/%E5%9B%BE%E5%83%8F%20005.png )
+   ![]( https://i.postimg.cc/9M705SWW/Image_038.png )
 
 ------
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Container, Row, Col, Card, CardBody, InputGroup, InputGroupAddon, InputGroupText, Input, CardHeader, Button, ButtonToolbar, ButtonGroup } from 'reactstrap';
+import { Row, Col, Card, CardBody, Badge, CardHeader, Button, ButtonToolbar, ButtonGroup } from 'reactstrap';
 import renderHTML from 'react-render-html';
 
 const pageLength = 20; /* disqus API will return 100 comments at most */
@@ -17,7 +17,6 @@ class CommentTree extends Component {
 
   componentDidMount(){
     const comments = this.props.comments;
-    let arrangedComments = [];
     if (comments && comments.response.length > 0) {
       for (var i = 0; i < comments.response.length; i++) {
         if (comments.response[i].parent == null) {
@@ -72,19 +71,22 @@ class CommentTree extends Component {
             <Col>
               <Card className="mt-2" size="sm" style={{'marginLeft': 30 * commentObj.level + 'px'}}>
                 <CardHeader className="p-1">
+                  <Badge color="primary">{commentObj.author.name}</Badge>
+                    {
+                      (parentCommentObj!=null)
+                      && 
+                        [
+                          <i className="fa fa-angle-right p-1" aria-hidden="true" key={commentObj.id}/>,
+                          <Badge color="primary">
+                            {parentCommentObj.author.name}
+                          </Badge>
+                        ]
+                    }
+
                   <span className="font-weight-bold">
-                    {commentObj.author.name} 
-                      {
-                        (parentCommentObj!=null)
-                        && 
-                        <span>
-                          <i className="fa fa-angle-right p-1" aria-hidden="true"/>
-                          {parentCommentObj.author.name}
-                        </span>
-                      }
                   </span>
                   <span className="pl-1">
-                    - {moment(commentObj.createdAt).format('YYYY-MM-DD')}
+                    - <Badge color="secondary">{moment(commentObj.createdAt).format('YYYY-MM-DD')}</Badge>
                   </span>
                   <span>
                     <Button size="sm" color="link" className="pull-right" style={{'lineHeight': 1}} index={i} onClick={this.replyToComment.bind(this)}>回复</Button>
@@ -114,13 +116,11 @@ class CommentTree extends Component {
         if (this.state.currentPage == 1) previousBtnProp['disabled'] = true;
         if (this.state.currentPage == (Math.floor(this.state.arrangedComments.length / pageLength) + 1)) nextBtnProp['disabled'] = true;
 
-        buttonGroup.push(<Button size="sm" color="toolbar" page={parseInt(this.state.currentPage) - 1} {...previousBtnProp} onClick={this.pageOnClick.bind(this)}>{'<'}</Button>)
+        buttonGroup.push(<Button size="sm" color="toolbar" key="0" page={parseInt(this.state.currentPage) - 1} {...previousBtnProp} onClick={this.pageOnClick.bind(this)}>{'<'}</Button>)
         for (let i = 1; i <= (this.state.arrangedComments.length / pageLength + 1) ; i++) {
-          let btnProp = {};
-          if (this.state.currentPage == i) btnProp['color'] = 'secondary'
-          buttonGroup.push(<Button size="sm" page={i} color={(this.state.currentPage == i)?'secondary':'toolbar'} onClick={this.pageOnClick.bind(this)}>{i}</Button>);
+          buttonGroup.push(<Button size="sm" page={i} key={i} color={(this.state.currentPage == i)?'primary':'toolbar'} onClick={this.pageOnClick.bind(this)}>{i}</Button>);
         }
-        buttonGroup.push(<Button size="sm" color="toolbar" page={parseInt(this.state.currentPage) + 1} {...nextBtnProp} onClick={this.pageOnClick.bind(this)}>{'>'}</Button>)
+        buttonGroup.push(<Button size="sm" color="toolbar" key="-1" page={parseInt(this.state.currentPage) + 1} {...nextBtnProp} onClick={this.pageOnClick.bind(this)}>{'>'}</Button>)
       }
 
       arrCommentsElem.push(

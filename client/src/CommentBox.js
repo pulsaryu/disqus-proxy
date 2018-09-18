@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import moment from 'moment';
-import { Container, Row, Col, Card, CardBody, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
-import renderHTML from 'react-render-html';
-
+import { Row, Col, Card, CardBody, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
 
 class CommentBox extends Component {
 
@@ -114,7 +111,7 @@ class CommentBox extends Component {
                 this.props.replyToCommentObj &&
                 <InputGroupAddon addonType="prepend">
                   <InputGroupText>
-                  Reply to
+                  回复:
                     <span className="text-primary pl-1">
                         {this.props.replyToCommentObj.author.name}
                     </span>
@@ -131,8 +128,9 @@ class CommentBox extends Component {
               </Row>
             </CardBody>
             <div className="card-footer text-muted m-0 p-0 form-group">
+
               <span className="small text-danger"></span>
-              <button type="button" className="comment-btn btn btn-secondary btn-sm pull-right m-1" onClick={this.postComment.bind(this)}>Post</button>
+              <button type="button" className="comment-btn btn btn-primary btn-sm pull-right m-1" onClick={this.postComment.bind(this)}>Post</button>
               {
                 this.props.replyToCommentObj &&
                 <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={this.cancelOnClick.bind(this)}>Cancel</button>
@@ -142,14 +140,16 @@ class CommentBox extends Component {
           {
             this.state.msg.length > 0
             &&
-            <Alert color="dark" className="small p-2">
+            <Alert color="primary" className="small p-2">
               {this.state.msg}
             </Alert>
           }
           <Modal isOpen={this.state.openAboutPage}>
             <ModalHeader>关于</ModalHeader>
             <ModalBody>
-              <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github Repo</a>
+              使用 React 通过 Bootstrap4 设计实现
+              <br/>
+              <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github</a>
               <br/>
               <a target="_blank" rel="noopener noreferrer" href="http://szhshp.org/tech/2018/09/16/disqusrebuild2.html">使用指导</a>
             </ModalBody>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CommentTree from './CommentTree';
 import CommentBox from './CommentBox';
-import { Container, Row, Col, Card, CardBody, InputGroup, InputGroupAddon, InputGroupText, Input } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 class DisqusProxy extends Component {
 
