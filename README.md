@@ -117,7 +117,7 @@ forever stopall
 
 #### 服务器自动启动
 
-参考另一篇文章:  [优雅地乱玩Linux-7-Cron实现程序自启动](/tech/2017/08/26/croninlinux.html)
+参考另一篇文章:  [优雅地乱玩Linux-7-Cron实现程序自启动](http://szhshp.org/tech/2017/08/26/croninlinux.html)
 
 
 ## 调试指导
