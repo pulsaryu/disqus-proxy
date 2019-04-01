@@ -1,7 +1,5 @@
 # Disqus-Proxy
 
-
-## 反 996 宣言
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 请共同参与抵抗 996 工作制, 祝所有 996 公司早日破产
