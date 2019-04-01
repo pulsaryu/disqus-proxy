@@ -1,10 +1,13 @@
 # Disqus-Proxy
 
+
+## 反 996 宣言
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 
 请共同参与抵抗 996 工作制, 祝所有 996 公司早日破产
 
->
+## 项目描述
+
 >这个项目应该只有墙内的和平民众会使用, 所以我也不准备多语言的功能啦
 >
 >[ 使用参考以及测试页面](http://szhshp.org/tech/2018/09/16/disqusrebuild2.html)
