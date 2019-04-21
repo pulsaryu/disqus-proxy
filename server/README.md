@@ -1,4 +1,4 @@
-# Disqus-Proxy Server
+# Disqus-Proxy - Server
 
 ## API
 
@@ -19,7 +19,7 @@
     - parent: null 或者 parent 评论的 ID
     - thread: 文章 ID, 注意这里不是 Ident, 只接受纯数字
 
-## Backend Deployment
+## Server Deployment
 
 1. 安装依赖
     
