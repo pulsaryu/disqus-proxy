@@ -36,7 +36,7 @@
 2. 到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
 3. 耐心以及做一番折腾的心理准备
 
-你需要进行两方面的 Deployment:
+搭建一个代理评论框, 你需要进行两方面的 Deployment:
 
-1. Frontend Deployment
-2. Backend Deployment
+1. [   后端设置    ](server/README.md#server-deployment)
+2. [前端设置](client/README.md#client-deployment)
