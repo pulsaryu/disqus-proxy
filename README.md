@@ -12,13 +12,11 @@
 
 >这个项目应该只有墙内的和平民众会使用, 所以我也不准备多语言的功能啦
 >
->[ 使用参考以及测试页面](http://szhshp.org/tech/2018/09/16/disqusrebuild2.html)
->
+>[ Demo 页面](http://szhshp.org/tech/2018/09/16/disqusrebuild2.html)
 
 
 ## 样式截图
 
-------
 - 评论框样式
    
    ![]( https://i.postimg.cc/mrqknRWX/Image_036.png  )
@@ -31,18 +29,21 @@
 
    ![]( https://i.postimg.cc/9M705SWW/Image_038.png )
 
-------
 
 
 ## 使用方法
 
 [repo链接](https://github.com/szhielelp/disqus-proxy)
 
->首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
+## Requirement
+
+1. 首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
+2. 到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
+
 
 ### 前端配置
 
-首先将 `client/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件并且进行配置
+首先将 `client/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件, 并且进行配置
 
 ```html
     <!-- 必须提供一个 id 完全相同的 div -->
@@ -76,40 +77,43 @@
 
 2. 安装依赖
     
-            npm i --production
-            // 或者
-            yarn install --production
-    
+```
+npm i --production
+// 或者
+yarn install --production
+```
+ 
 3. 配置 server 目录下的config.js
     
-    <pre class="brush: js">
-        module.exports = {
-                // 服务端端口，需要与 disqus-proxy 前端设置一致
-                port: 5509,
-                // 你的 diqus secret key
-                api_secret: 'your secret key',
-                // 你的 disqus 名称，就是forum名称
-                username:'ciqu',
-                // 服务端 socks5 代理转发，便于在本地测试，生产环境通常为 null
-                socks5Proxy: null,
-                // 日志输出位置, 输出到文件或控制台 'file' | 'console'
-                log: 'console'
-        }
-    </pre>
+```js
+module.exports = {
+    // 服务端端口，需要与 disqus-proxy 前端设置一致
+    port: 5509,
+    // 你的 diqus secret key
+    api_secret: 'your secret key',
+    // 你的 disqus 名称，就是forum名称
+    username:'ciqu',
+    // 服务端 socks5 代理转发，便于在本地测试，生产环境通常为 null
+    socks5Proxy: null,
+    // 日志输出位置, 输出到文件或控制台 'file' | 'console'
+    log: 'console'
+}
+```
 
-    api secret key需要在Disqus的API页面申请
+api secret key 需要在 [Disqus 的 API 页面](https://disqus.com/api/applications/)申请
 
-    另外需要到`Settings => Community` 里开启访客评论
+另外需要到`Settings => Community` 里开启访客评论
 
 4. 启动服务
 
-            cd server
-            node index.js
+```
+cd server
+node index.js
+```
 
-    正常运行服务，关闭ssh的时候就会关闭服务器，因此可以考虑使用forever插件
+> 正常运行服务，关闭 ssh 的时候就会关闭服务器，因此可以考虑使用 forever 插件
 
 5. 让服务跟随服务器自动启动  
-
 
 
 #### Forever 的使用
@@ -135,7 +139,14 @@ forever stopall
 
 本地运行的条件是本地已经可以访问 Disqus, 因此建议挂载到 VPS 进行 FTP 连接.
 
-进入 `\server` 执行 `node index.js` 即可开启服务
+进入 `\server` 执行:
+
+```
+npm install
+node index.js
+```
+
+即可开启调试
 
 ### 客户端调试
 
