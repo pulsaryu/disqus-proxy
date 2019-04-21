@@ -146,7 +146,10 @@ npm install
 node index.js
 ```
 
-即可开启调试
+即可开启调试.
+
+确认开启服务端之后到浏览器输入 `http://localhost:5050/api/listPosts` 应该会显示所有评论数据
+
 
 ### 客户端调试
 
