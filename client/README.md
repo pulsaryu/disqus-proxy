@@ -1,11 +1,11 @@
-# Disqus-Proxy Client
+# Disqus-Proxy - Client
 
 ## Requirements
 
 - React
 - Reactstrap
 
-## Deployment
+## Client Deployment
 
 首先将 `client/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件, 并且进行配置
 
