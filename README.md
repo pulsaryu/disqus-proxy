@@ -14,7 +14,7 @@ Disqus 方向代理评论框的实现
 
 >这个项目应该只有墙内的和平民众会使用, 所以我也不准备多语言的功能啦
 >
->[ Demo 页面](http://szhshp.org/tech/2018/09/16/disqusrebuild2.html)
+>[ Demo 页面](http://szhshp.org/tech/2017/08/20/jekylldisqusproxy.html)
 
 
 
