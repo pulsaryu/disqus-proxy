@@ -58,5 +58,5 @@ Finished:
 
 想要搭建一个代理评论框, 你需要进行两方面的 Deployment:
 
-1. [   后端设置    ](server/README.md#server-deployment)
-2. [前端设置](client/README.md#client-deployment)
+1. [   后端设置    ](server/#server-deployment)
+2. [前端设置](client/#client-deployment)
