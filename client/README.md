@@ -37,9 +37,8 @@
     <link rel="stylesheet" href="/static/css/main.331fc925.css"> 
 ```
 
-## Debug Guidance
 
-### Debug
+## Debug
 
 进入 `\client` 执行 `npm start` 即可开启本地调试
 
