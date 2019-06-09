@@ -24,9 +24,7 @@
 1. 安装依赖
     
 ```
-npm i --production
-// 或者
-yarn install --production
+npm install
 ```
  
 3. 配置 server 目录下的config.js
@@ -54,7 +52,7 @@ api secret key 需要在 [Disqus 的 API 页面](https://disqus.com/api/applicat
 
 ```
 cd server
-node index.js
+npm start
 ```
 
 > 正常运行服务，关闭 ssh 的时候就会关闭服务器，因此可以考虑使用 forever 插件
