@@ -89,7 +89,7 @@ router.get('/api/getComments', async function (ctx) {
       url: 'https://disqus.com/api/3.0/threads/listPosts.json?' +
       'api_secret=' + config.api_secret +
       '&forum=' + config.username +
-      '&limit=' + 500 +
+      '&limit=' + 100 +
       // '&thread:ident=' + ctx.request.query.identifier,
       '&thread:ident=' + encodeURIComponent(ctx.request.query.identifier),
       json: true
