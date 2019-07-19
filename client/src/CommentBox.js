@@ -3,7 +3,7 @@ import { Row, Col, Card, CardBody, InputGroup, Modal, ModalHeader, ModalBody, Mo
 
 class CommentBox extends Component {
 
-  constructor(){
+  constructor() {
     super()
     this.state = {
       comments: null,
@@ -16,43 +16,43 @@ class CommentBox extends Component {
     }
   }
 
-  cancelOnClick(){
+  cancelOnClick() {
     this.props.cancelOnClick();
   }
 
-  emailOnChange(e){
+  emailOnChange(e) {
     this.setState({
       email: e.target.value,
     })
   }
 
-  contentOnChange(e){
+  contentOnChange(e) {
     this.setState({
       content: e.target.value,
     })
   }
 
-  nameOnChange(e){
+  nameOnChange(e) {
     this.setState({
       name: e.target.value,
     });
   };
 
-  toggleAboutPage(e){
+  toggleAboutPage(e) {
     this.setState({
       openAboutPage: !this.state.openAboutPage,
     });
   }
 
-  postComment(e){
+  postComment(e) {
     const { email, name, content } = this.state;
     const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let msg = '';
-    if(content.trim().length == 0){
+    if (content.trim().length == 0) {
       msg = 'Content is blank';
-    }else if(name.length == 0){
+    } else if (name.length == 0) {
       msg = 'Invalid Name';
-    }else if(!regex.test(email)){
+    } else if (!regex.test(email)) {
       msg = 'Invalid Email';
     }
     if (msg.length > 0) {
@@ -62,8 +62,9 @@ class CommentBox extends Component {
       return;
     }
 
-    const {server,port} = window.disqusProxy;
-    fetch(`http://${server}:${port}/api/createComment`,{
+    let { server, port, https } = window.disqusProxy;
+
+    fetch(`${(https ? 'https' : 'http')}://${server}${port !== undefined ? (':' + port) : ''}/api/createComment`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -76,50 +77,50 @@ class CommentBox extends Component {
         parent: (this.props.replyToCommentObj && this.props.replyToCommentObj.id) ? this.props.replyToCommentObj.id : null
       }),
     })
-    .then( (res) => res.json() )
-    .then( (res) => {
-      if (res.code == 0) {
-        this.setState({
-          comments: null,
-          commentsLoaded: null,
-          name: '',
-          email: '',
-          content: '',
-          msg: '评论成功, 请等待审核...',
-        });
-      }else{
-        this.setState({
-          msg: res.response,
-        });
-      }
-    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.code == 0) {
+          this.setState({
+            comments: null,
+            commentsLoaded: null,
+            name: '',
+            email: '',
+            content: '',
+            msg: '评论成功, 请等待审核...',
+          });
+        } else {
+          this.setState({
+            msg: res.response,
+          });
+        }
+      })
 
   };
 
-  render(){
+  render() {
     return (
       <Row>
         <Col>
           <Card>
             <CardHeader className="p-1 small">
-              <span style={{fontSize: '1rem'}}>留言板</span>
+              <span style={{ fontSize: '1rem' }}>留言板</span>
               <Button color="link" className="pull-right p-0" onClick={this.toggleAboutPage.bind(this)}>关于</Button>
             </CardHeader>
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1" size="small">
-              {
-                this.props.replyToCommentObj &&
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                  回复:
+                {
+                  this.props.replyToCommentObj &&
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      回复:
                     <span className="text-primary pl-1">
                         {this.props.replyToCommentObj.author.name}
-                    </span>
-                  </InputGroupText>
-                </InputGroupAddon>
-              }
-                <Input type="text" placeholder="Your Name" className="form-control form-control-sm" value={this.state.name} onChange={this.nameOnChange.bind(this)}/>
-                <Input type="email" placeholder="Your Email" className="form-control form-control-sm" value={this.state.email} onChange={this.emailOnChange.bind(this)}/>
+                      </span>
+                    </InputGroupText>
+                  </InputGroupAddon>
+                }
+                <Input type="text" placeholder="Your Name" className="form-control form-control-sm" value={this.state.name} onChange={this.nameOnChange.bind(this)} />
+                <Input type="email" placeholder="Your Email" className="form-control form-control-sm" value={this.state.email} onChange={this.emailOnChange.bind(this)} />
               </InputGroup>
               <Row className="m-0 p-0">
                 <Col className="d-flex m-0 p-1 border-0">
@@ -148,9 +149,9 @@ class CommentBox extends Component {
             <ModalHeader>关于</ModalHeader>
             <ModalBody>
               使用 React 通过 Bootstrap4 设计实现
-              <br/>
+              <br />
               <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github</a>
-              <br/>
+              <br />
               <a target="_blank" rel="noopener noreferrer" href="http://szhshp.org/tech/2018/09/16/disqusrebuild2.html">使用指导</a>
             </ModalBody>
             <ModalFooter>
