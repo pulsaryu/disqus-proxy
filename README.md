@@ -14,9 +14,33 @@ Disqus-Proxy
 
 Disqus 代理评论框的实现
 
+> 没有 VPS 也可以实现代理!!!!!
+>
 >这个项目应该只有墙内的和平民众会使用, 所以我也不准备多语言的功能啦
 >
 >[ Demo 页面](http://szhshp.org/tech/2017/08/20/jekylldisqusproxy.html)
+
+
+## 服务搭建
+
+下方任选一种即可 ↓↓↓↓↓↓↓
+
+### Serverless 服务搭建 (推荐!)
+
+
+参考这篇文章: [Disqus评论框改造工程-实现 Disqus 代理的 Serverless 服务](https://szhshp.org/tech/2019/07/22/disquswithouvps.html)
+
+### 标准服务搭建
+
+>首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
+
+2. 到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
+
+想要搭建一个代理评论框, 你需要进行两方面的 Deployment:
+
+1. [   后端设置    ](server/#server-deployment)
+2. [前端设置](client/#client-deployment)
+
 
 
 
@@ -52,13 +76,3 @@ Finished:
    ![]( https://i.postimg.cc/9M705SWW/Image_038.png )
 
 
-## 服务搭建
-
-1. 首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
-2. 到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
-3. 耐心以及做一番折腾的心理准备
-
-想要搭建一个代理评论框, 你需要进行两方面的 Deployment:
-
-1. [   后端设置    ](server/#server-deployment)
-2. [前端设置](client/#client-deployment)
