@@ -28,12 +28,11 @@ Disqus 代理评论框的实现
 
 下方任选一种即可 ↓↓↓↓↓↓↓
 
-### Serverless 服务搭建 (推荐!)
-
+### Serverless 服务搭建 (推荐! 不需要任何服务器)
 
 参考这篇文章: [Disqus 评论框改造工程-实现 Disqus 代理的 Serverless 服务](https://szhshp.org/tech/2019/07/22/disquswithouvps.html)
 
-### 标准服务搭建
+### 标准服务搭建 （需要服务器）
 
 >首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
 
