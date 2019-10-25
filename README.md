@@ -2,13 +2,16 @@
 Disqus-Proxy
 </h1>
 
-<div align=center><img width="400px" src="logo.png"/></div>
+<div align="center"><img width="400px" src="logo.png"/></div>
 
 
-
-[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
-[![LICENSE](https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
-[![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)  
+<p align="center">
+  
+  
+<img src="https://img.shields.io/badge/link-996.icu-red.svg"/>
+<img src="https://img.shields.io/badge/license-NPL%20(The%20996%20Prohibited%20License)-blue.svg"/>
+<img src="https://badges.frapsoft.com/os/gpl/gpl.svg?v=103"/>
+</p>
 
 ## 项目描述
 
@@ -28,13 +31,13 @@ Disqus 代理评论框的实现
 ### Serverless 服务搭建 (推荐!)
 
 
-参考这篇文章: [Disqus评论框改造工程-实现 Disqus 代理的 Serverless 服务](https://szhshp.org/tech/2019/07/22/disquswithouvps.html)
+参考这篇文章: [Disqus 评论框改造工程-实现 Disqus 代理的 Serverless 服务](https://szhshp.org/tech/2019/07/22/disquswithouvps.html)
 
 ### 标准服务搭建
 
 >首先你要有个 VPS, 并且 VPS 能够正常访问 Disqus
 
-2. 到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
+首先到 [Disqus API 页面](https://disqus.com/api/applications/)注册一个新的 App, 记录其 `public key` 与 `secret key`
 
 想要搭建一个代理评论框, 你需要进行两方面的 Deployment:
 
