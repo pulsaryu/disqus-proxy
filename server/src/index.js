@@ -8,10 +8,26 @@ const config = require('./config');
 
 const app = new Koa();
 
+if (config.api_key === '' || config.api_secret === '') {
+  console.log(`Error occured in config: API Key not set`);
+  return;
+}
+
+
 if (config.log === 'file') {
   log4js.configure({
-    appenders: { 'disqus-proxy': { type: 'file', filename: 'disqusProxy.log' } },
-    categories: { default: { appenders: ['disqus-proxy'], level: 'info' } },
+    appenders: {
+      'disqus-proxy': {
+        type: 'file',
+        filename: 'disqusProxy.log'
+      }
+    },
+    categories: {
+      default: {
+        appenders: ['disqus-proxy'],
+        level: 'info'
+      }
+    },
   });
 }
 
@@ -32,7 +48,7 @@ router.get('/api/getThreads', async (ctx) => {
       '&forum=',
       config.username,
       '&thread:ident=',
-      encodeURIComponent(ctx.request.query.identifier),
+      (config.testPage !== '' ? config.testPage : encodeURIComponent(ctx.request.query.identifier)),
     ].join('');
 
     logger.info(url);
@@ -59,7 +75,8 @@ router.get('/api/listPosts', async (ctx) => {
       'api_key=', config.api_key,
       (ctx.request.query.include === undefined) ? '' : ctx.request.query.include.split(',').map((e) => `@include=${e}`).join(''),
       '&forum=', config.username,
-      '&limit=12'].join('');
+      '&limit=12'
+    ].join('');
 
     logger.info(url);
 
@@ -87,7 +104,8 @@ router.get('/api/getComments', async (ctx) => {
       config.api_secret, '&forum=', config.username,
       '&limit=100',
       '&thread:ident=',
-      encodeURIComponent(ctx.request.query.identifier)].join('');
+      (config.testPage !== '' ? config.testPage : encodeURIComponent(ctx.request.query.identifier)),
+    ].join('');
 
     logger.info(url);
 
@@ -121,6 +139,30 @@ router.post('/api/createComment', async (ctx) => {
     }));
   } catch (e) {
     logger.error(`Error when create comment:${JSON.stringify(e.error)}`);
+    ctx.body = e.error;
+    return;
+  }
+  ctx.body = result;
+  logger.info(`Create comment successfully with response code: ${result.code}`);
+});
+
+
+router.post('/api/spamComments', async (ctx) => {
+  logger.info('Spam Comment');
+  let result;
+  try {
+    logger.info(JSON.stringify(ctx.request.body));
+
+    result = await rq(Object.assign(req, {
+      url: 'https://disqus.com/api/3.0/posts/spam.json',
+      method: 'POST',
+      form: Object.assign(ctx.request.body, {
+        api_key: 'E8Uh5l5fHZ6gD8U3KycjAIAk46f68Zw7C6eW8WSjZvCLXebZ7p0r1yrYDrLilk2F',
+      }),
+      json: true,
+    }));
+  } catch (e) {
+    logger.error(`Error when spam comment:${JSON.stringify(e.error)}`);
     ctx.body = e.error;
     return;
   }
