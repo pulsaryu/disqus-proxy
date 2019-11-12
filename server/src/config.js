@@ -3,5 +3,5 @@ module.exports = {
   api_key: '',
   api_secret: '',
   username: 'szhshp',
-  log: 'file',
+  testPage: ''
 };

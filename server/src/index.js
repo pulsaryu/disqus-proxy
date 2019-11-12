@@ -5,7 +5,6 @@ const bodyParser = require('koa-bodyparser');
 const log4js = require('log4js');
 const cors = require('kcors');
 const config = require('./config');
-
 const app = new Koa();
 
 if (config.api_key === '' || config.api_secret === '') {
@@ -13,23 +12,20 @@ if (config.api_key === '' || config.api_secret === '') {
   return;
 }
 
-
-if (config.log === 'file') {
-  log4js.configure({
-    appenders: {
-      'disqus-proxy': {
-        type: 'file',
-        filename: 'disqusProxy.log'
-      }
-    },
-    categories: {
-      default: {
-        appenders: ['disqus-proxy'],
-        level: 'info'
-      }
-    },
-  });
-}
+log4js.configure({
+  appenders: {
+    'disqus-proxy': {
+      type: 'file',
+      filename: 'disqusProxy.log'
+    }
+  },
+  categories: {
+    default: {
+      appenders: ['disqus-proxy'],
+      level: 'info'
+    }
+  },
+});
 
 const logger = log4js.getLogger('disqus-proxy');
 app.use(bodyParser());
@@ -37,145 +33,104 @@ app.use(cors());
 
 const req = {};
 
-router.get('/api/getThreads', async (ctx) => {
-  logger.info('Get Thread');
+let sendRequest = async ({
+  task,
+  method,
+  url,
+  form
+}) => {
+  logger.info(`${task} - Started.`)
   let result;
 
   try {
-    const url = ['https://disqus.com/api/3.0/threads/list.json?',
+    if (method === 'GET') {
+      logger.info(`GET ${url}`);
+    } else {
+      logger.info(`POST ${url}`);
+      logger.info(`Form: ${JSON.stringify(form)}`);
+    }
+
+    result = await rq(Object.assign(req, {
+      method,
+      url,
+      form,
+      json: true,
+    }));
+    logger.error(`${task} - Success with response code: ${result.code}`);
+  } catch (error) {
+    result = error.error;
+    logger.error(`${task} - Error: ${JSON.stringify(error.error)}`);
+  }
+  console.log(result);
+
+  return result;
+}
+
+router.get('/api/getThreads', async (ctx) => {
+  ctx.body = await sendRequest({
+    task: 'List threads',
+    method: 'GET',
+    url: ['https://disqus.com/api/3.0/threads/list.json?',
       'api_secret=',
       config.api_secret,
       '&forum=',
       config.username,
       '&thread:ident=',
       (config.testPage !== '' ? config.testPage : encodeURIComponent(ctx.request.query.identifier)),
-    ].join('');
-
-    logger.info(url);
-
-    result = await rq(Object.assign(req, {
-      method: 'GET',
-      url,
-      json: true,
-    }));
-  } catch (e) {
-    ctx.body = e.error;
-    logger.error(`Error when get thread:${JSON.stringify(e.error)}`);
-    return;
-  }
-  logger.info(`Get thread successfully with response code: ${result.code}`);
-  ctx.body = result;
+    ].join(''),
+  });
 });
 
 router.get('/api/listPosts', async (ctx) => {
-  logger.info('Get Posts');
-  let result;
-  try {
-    const url = ['https://disqus.com/api/3.0/forums/listPosts.json?',
+  ctx.body = await sendRequest({
+    task: 'List posts',
+    method: 'GET',
+    url: ['https://disqus.com/api/3.0/forums/listPosts.json?',
       'api_key=', config.api_key,
-      (ctx.request.query.include === undefined) ? '' : ctx.request.query.include.split(',').map((e) => `@include=${e}`).join(''),
+      (ctx.request.query.include === undefined) ? '' : ctx.request.query.include.split(',').map((e) => `&include=${e}`).join(''),
       '&forum=', config.username,
-      '&limit=12'
-    ].join('');
-
-    logger.info(url);
-
-    result = await rq(Object.assign(req, {
-      method: 'GET',
-      url,
-      json: true,
-    }));
-  } catch (e) {
-    ctx.body = e.error;
-    logger.error(`Error when get comment:${JSON.stringify(e.error)}`);
-    return;
-  }
-  logger.info(`Get comments successfully with response code: ${result.code}`);
-  ctx.body = result;
+      '&limit=', (ctx.request.query.limit === undefined) ? 20 : ctx.request.query.limit
+    ].join(''),
+  });
 });
 
 router.get('/api/getComments', async (ctx) => {
-  logger.info(`Get Comments with identifier: ${ctx.request.query.identifier}`);
-  let result;
-
-  try {
-    const url = ['https://disqus.com/api/3.0/threads/listPosts.json?',
+  ctx.body = await sendRequest({
+    task: 'List posts',
+    method: 'GET',
+    url: ['https://disqus.com/api/3.0/threads/listPosts.json?',
       'api_secret=',
       config.api_secret, '&forum=', config.username,
-      '&limit=100',
+      '&limit=', (ctx.request.query.limit === undefined) ? 100 : ctx.request.query.limit,
       '&thread:ident=',
       (config.testPage !== '' ? config.testPage : encodeURIComponent(ctx.request.query.identifier)),
-    ].join('');
-
-    logger.info(url);
-
-    result = await rq(Object.assign(req, {
-      method: 'GET',
-      url,
-      json: true,
-    }));
-  } catch (e) {
-    ctx.body = e.error;
-    logger.error(`Error when get comment:${JSON.stringify(e.error)}`);
-    return;
-  }
-  logger.info(`Get comments successfully with response code: ${result.code}`);
-  ctx.body = result;
+    ].join(''),
+  });
 });
+
 
 router.post('/api/createComment', async (ctx) => {
-  logger.info('Create Comment');
-  let result;
-  try {
-    logger.info(JSON.stringify(ctx.request.body));
-
-    result = await rq(Object.assign(req, {
-      url: 'https://disqus.com/api/3.0/posts/create.json',
-      method: 'POST',
-      form: Object.assign(ctx.request.body, {
-        api_key: 'E8Uh5l5fHZ6gD8U3KycjAIAk46f68Zw7C6eW8WSjZvCLXebZ7p0r1yrYDrLilk2F',
-      }),
-      json: true,
-    }));
-  } catch (e) {
-    logger.error(`Error when create comment:${JSON.stringify(e.error)}`);
-    ctx.body = e.error;
-    return;
-  }
-  ctx.body = result;
-  logger.info(`Create comment successfully with response code: ${result.code}`);
+  ctx.body = await sendRequest({
+    task: 'Create Comment',
+    method: 'POST',
+    url: 'https://disqus.com/api/3.0/posts/create.json',
+    form: Object.assign(ctx.request.body, {
+      api_key: 'E8Uh5l5fHZ6gD8U3KycjAIAk46f68Zw7C6eW8WSjZvCLXebZ7p0r1yrYDrLilk2F',
+      /* fixed private key, for anonymous comments we will always use this key */
+    }),
+  });
 });
 
-
-router.post('/api/spamComments', async (ctx) => {
-  logger.info('Spam Comment');
-  let result;
-  try {
-    logger.info(JSON.stringify(ctx.request.body));
-
-    result = await rq(Object.assign(req, {
-      url: 'https://disqus.com/api/3.0/posts/spam.json',
-      method: 'POST',
-      form: Object.assign(ctx.request.body, {
-        api_key: 'E8Uh5l5fHZ6gD8U3KycjAIAk46f68Zw7C6eW8WSjZvCLXebZ7p0r1yrYDrLilk2F',
-      }),
-      json: true,
-    }));
-  } catch (e) {
-    logger.error(`Error when spam comment:${JSON.stringify(e.error)}`);
-    ctx.body = e.error;
-    return;
-  }
-  ctx.body = result;
-  logger.info(`Create comment successfully with response code: ${result.code}`);
+router.post('/api/comment/:action', async (ctx) => {
+  ctx.body = await sendRequest({
+    task: `Comment ${ctx.params.action}`,
+    method: 'POST',
+    url: `https://disqus.com/api/3.0/posts/${ctx.params.action}.json?`,
+    form: Object.assign(ctx.request.body, {
+      api_key: config.api_key,
+    }),
+  });
 });
-
-
-// TODO: Approve
-// TODO: Spam
-// TODO: Remove
-// TODO: Vote
-// TODO: Restore
 
 app
   .use(router.routes())
@@ -184,8 +139,5 @@ app
 app.listen(config.port);
 
 console.log(`Disqus proxy server start at port: ${config.port}`);
-
-if (config.log === 'file') {
-  console.log('See disqus-proxy.log in current directory.');
-  logger.info(`Server start at port: ${config.port}`);
-}
+console.log('See disqus-proxy.log in current directory.');
+logger.info(`Server start at port: ${config.port}`);
