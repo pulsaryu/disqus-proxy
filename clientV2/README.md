@@ -1,44 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Disqus-Proxy: Client
 
-## Available Scripts
+## Client Deployment
 
-In the project directory, you can run:
+首先将 `client/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件, 并且进行配置
 
-### `yarn start`
+```html
+    <!-- 必须提供一个 id 完全相同的 div -->
+    <div id="disqus_thread"></div>
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    <!-- 一些元素用到了 FA 的 icon, 这一段可以放到 header 里面 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
 
-### `yarn test`
+    <script>
+      window.disqusProxy = {
+        username:'szhshp',  // 你的 Disqus username
+        server: 'xxx.xx.xxx.xx', // 你的 VPS IP
+        port: 5000, // 服务端对应的端口, 如果没有端口那么就忽略这个 Attr
+        https: true, 
+        identifier: window.location.href // 页面 identifier, 一般就是页面 url
+      };
+      window.disqus_config = function () {
+        this.page.url = window.location.href;
+        this.page.identifier = window.location.href;
+      };
+      var s = document.createElement('script');
+      s.src = '/static/js/main.09c31d67.js'; //引用 static 文件夹下面的 JS
+      s.async = true;
+      document.body.appendChild(s);
+    </script>
+    <!-- 引用 static 文件夹下面的 CSS -->
+    <link rel="stylesheet" href="/static/css/main.331fc925.css"> 
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Debug
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+yarn start
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+#### Build
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+yarn build
+```
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
