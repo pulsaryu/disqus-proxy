@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="disqus_thread"></div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Web site created using create-react-app" />
+  <script>
+    window.disqusProxy = {
+      username: 'szhshp',
+      server: 'localhost',
+      protocol: 'http',
+      port: 5050,
+      defaultAvatar: '/img/default-avatar.png',
+      adminAvatar: 'http://comic.szhshp.org/comic/10101/headshot/0 (2).png',
+      identifier: window.location.href,
+      // uncomment to toggle debug
+      debug: true,
+    }
+
+  </script>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="disqus_thread"></div>
+</body>
+
 </html>
