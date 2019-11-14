@@ -61,8 +61,6 @@ let sendRequest = async ({
     result = error.error;
     logger.error(`${task} - Error: ${JSON.stringify(error.error)}`);
   }
-  console.log(result);
-
   return result;
 }
 

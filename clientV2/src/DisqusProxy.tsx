@@ -1,8 +1,8 @@
 import React from 'react';
-// import CommentTree from './CommentTree';
+import CommentTree from './CommentTree';
 import CommentBox from './CommentBox';
 import { Row, Col } from 'reactstrap';
-import { iDisqusProxyStates, iReplyToCommentObj } from './Interfaces'
+import { iDisqusProxyStates, iReplyCommentObj } from './Interfaces'
 import { config } from './Config';
 
 class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
@@ -12,7 +12,7 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
     this.state = {
       comments: undefined,
       commentsLoaded: false,
-      replyToCommentObj: undefined,
+      replyCommentObj: undefined,
       thread: undefined,
     }
   }
@@ -45,9 +45,9 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
       }));
   }
 
-  toggleReplyMode(replyToCommentObj: undefined | iReplyToCommentObj) {
+  toggleReplyMode(replyCommentObj: undefined | iReplyCommentObj) {
     this.setState({
-      replyToCommentObj,
+      replyCommentObj,
     });
   }
 
@@ -57,20 +57,19 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
 
   render() {
 
-    const { thread, replyToCommentObj } = this.state;
+    const { thread, replyCommentObj } = this.state;
 
     return (
       <div className="p-1">
         {
           (this.state.commentsLoaded === true)
           &&
-          <CommentBox replyToCommentObj={replyToCommentObj} cancelOnClick={this.cancelReply.bind(this)} thread={thread} />
+          <CommentBox replyToCommentObj={replyCommentObj} cancelOnClick={this.cancelReply.bind(this)} thread={thread} />
         }
         {
           (this.state.commentsLoaded === true)
           &&
-          <div >2222222222</div>
-          // <CommentTree comments={this.state.comments} replyOnClick={this.toggleReplyMode.bind(this)} />
+          <CommentTree comments={this.state.comments} replyToCommentObj={replyCommentObj} />
         }
         {
           (this.state.commentsLoaded === false) &&
