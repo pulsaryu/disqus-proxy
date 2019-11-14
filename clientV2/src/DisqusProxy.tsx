@@ -15,6 +15,7 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
       replyCommentObj: undefined,
       thread: undefined,
     }
+    this.toggleReplyMode = this.toggleReplyMode.bind(this);
   }
 
   componentDidMount() {
@@ -69,12 +70,12 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
         {
           (this.state.commentsLoaded === true)
           &&
-          <CommentTree comments={this.state.comments} replyToCommentObj={replyCommentObj} />
+          <CommentTree comments={this.state.comments} replyOnClick={this.toggleReplyMode} />
         }
         {
           (this.state.commentsLoaded === false) &&
           <Row>
-            <Col>Error</Col>
+            <Col>Loading...</Col>
           </Row>
         }
       </div>

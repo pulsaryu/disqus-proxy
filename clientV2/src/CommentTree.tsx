@@ -61,9 +61,7 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
   replyToComment(e: any) {
     const index = e.target.getAttribute('index');
     const parentPostObj = this.state.arrangedComments[index];
-    // if (this.props.replyToCommentObj !== undefined) {
-    //   this.props.replyToCommentObj(parentPostObj);
-    // }
+    this.props.replyOnClick(parentPostObj);
   }
 
   render() {
@@ -106,7 +104,7 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
                       <img className="img-fluid" width="50px" height="50px" src={commentObj.author.avatar.permalink} alt="" />
                     </div>
                     <div className="col">
-                      {/* <div>{React.render(commentObj.message)}</div> */}
+                      <div dangerouslySetInnerHTML={{ __html: commentObj.message }} />
                     </div>
                   </Row>
                 </CardBody>

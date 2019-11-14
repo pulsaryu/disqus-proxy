@@ -48,5 +48,5 @@ export interface iCommentTreeStates {
 
 export interface iCommentTreeProps {
   comments: undefined | iComment,
-  replyToCommentObj: undefined | iReplyCommentObj,
+  replyOnClick(replyCommentObj: undefined | iReplyCommentObj): void,
 }
