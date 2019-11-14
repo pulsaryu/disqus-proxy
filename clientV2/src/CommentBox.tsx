@@ -3,7 +3,7 @@ import { Row, Col, Card, CardBody, Badge, InputGroup, Modal, ModalHeader, ModalB
 import { iCommentBoxStates, iCommentBoxProps } from './Interfaces'
 import { config } from './Config';
 
-const { server, port, protocol, debug } = config.disqusProxy;
+const { server, port, protocol } = config.disqusProxy;
 
 export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxStates> {
   constructor(props: any, context?: any) {
@@ -121,16 +121,13 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
                 {
                   (this.props.replyToCommentObj) &&
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      回复:
-                      <span className="text-primary pl-1">
-                        {this.props.replyToCommentObj.author.name}
-                      </span>
+                    <InputGroupText size="small">
+                      回复: {this.props.replyToCommentObj.author.name}
                     </InputGroupText>
                   </InputGroupAddon>
                 }
-                <Input type="text" placeholder="Your Name" className="form-control form-control-sm" value={name} name="name" onChange={this.inputOnChange} />
-                <Input type="email" placeholder="Your Email" className="form-control form-control-sm" value={email} name="email" onChange={this.inputOnChange} />
+                <Input type="text" placeholder="Your Name" className="" value={name} name="name" onChange={this.inputOnChange} />
+                <Input type="email" placeholder="Your Email" className="" value={email} name="email" onChange={this.inputOnChange} />
               </InputGroup>
               <Row className="m-0 p-0">
                 <Col className="d-flex m-0 p-1 border-0">
