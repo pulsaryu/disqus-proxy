@@ -1,30 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 // import CommentTree from './CommentTree';
-// import CommentBox from './CommentBox';
+import CommentBox from './CommentBox';
 import { Row, Col } from 'reactstrap';
+import { iDisqusProxyStates, iReplyToCommentObj } from './Interfaces'
+import { config } from './Config';
 
-
-interface DisqusProxyStates {
-  comments: undefined | object,
-  commentsLoaded: boolean,
-  isReplyMode: boolean, /* new comment or reply to existed comment */
-  thread: undefined, /* specify which thread id to reply to  */
-}
-
-class DisqusProxy extends React.Component<{}, DisqusProxyStates> {
+class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
 
   constructor(props: any, context?: any) {
     super(props, context);
     this.state = {
       comments: undefined,
       commentsLoaded: false,
-      isReplyMode: false,
+      replyToCommentObj: undefined,
       thread: undefined,
     }
   }
 
   componentDidMount() {
-    const { server, port, identifier, protocol, debug } = window.disqusProxy;
+    const { server, port, identifier, protocol, debug } = config.disqusProxy;
     const host = [
       (protocol + '://' + server),
       (port !== undefined ? (':' + port) : ''),
@@ -51,23 +45,26 @@ class DisqusProxy extends React.Component<{}, DisqusProxyStates> {
       }));
   }
 
-  toggleReplyMode(isReplyMode: boolean) {
+  toggleReplyMode(replyToCommentObj: undefined | iReplyToCommentObj) {
     this.setState({
-      isReplyMode,
+      replyToCommentObj,
     });
   }
 
   cancelReply() {
-    this.toggleReplyMode(false);
+    this.toggleReplyMode(undefined);
   }
 
   render() {
+
+    const { thread, replyToCommentObj } = this.state;
+
     return (
       <div className="p-1">
         {
           (this.state.commentsLoaded === true)
           &&
-          <CommentBox isReplyMode={this.state.isReplyMode} cancelOnClick={this.cancelReply.bind(this)} />
+          <CommentBox replyToCommentObj={replyToCommentObj} cancelOnClick={this.cancelReply.bind(this)} thread={thread} />
         }
         {
           (this.state.commentsLoaded === true)

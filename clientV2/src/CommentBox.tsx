@@ -1,21 +1,11 @@
-import React, { Component } from 'react';
-import { Row, Col, Card, CardBody, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
+import React from 'react';
+import { Row, Col, Card, CardBody, Badge, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
+import { iCommentBoxStates, iCommentBoxProps } from './Interfaces'
+import { config } from './Config';
 
-interface CommentBoxStates {
-  comments: string,
-  commentsLoaded: boolean,
-  name: string,
-  email: string,
-  content: string,
-  msg: string,
-  openAboutPage: boolean,
-}
+const { server, port, protocol, debug } = config.disqusProxy;
 
-interface CommentBoxProps {
-  cancelOnClick: any;
-}
-
-export class NetworkWrapper extends React.Component<CommentBoxProps, CommentBoxStates> {
+export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxStates> {
   constructor(props: any, context?: any) {
     super(props, context);
     this.state = {
@@ -59,6 +49,9 @@ export class NetworkWrapper extends React.Component<CommentBoxProps, CommentBoxS
 
   postComment(e: any) {
     const { email, name, content } = this.state;
+    const { thread, replyToCommentObj } = this.props;
+
+    /* validation */
     const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let msg = '';
     if (content.trim().length == 0) {
@@ -75,7 +68,6 @@ export class NetworkWrapper extends React.Component<CommentBoxProps, CommentBoxS
       return;
     }
 
-    const { server, port, identifier, protocol, debug } = window.disqusProxy;
     const host = [
       (protocol + '://' + server),
       (port !== undefined ? (':' + port) : ''),
@@ -90,8 +82,8 @@ export class NetworkWrapper extends React.Component<CommentBoxProps, CommentBoxS
         author_email: email,
         author_name: name,
         message: content,
-        thread: window.disqusProxy.thread, //TODO: pass the value via props
-        parent: (this.props.replyToCommentObj && this.props.replyToCommentObj.id) ? this.props.replyToCommentObj.id : null
+        thread,
+        parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null
       }),
     })
       .then((res) => res.json())
@@ -163,9 +155,10 @@ export class NetworkWrapper extends React.Component<CommentBoxProps, CommentBoxS
             </Alert>
           }
           <Modal isOpen={this.state.openAboutPage}>
-            <ModalHeader>关于</ModalHeader>
+            <ModalHeader>Disqus Proxy</ModalHeader>
             <ModalBody>
-              使用 React 通过 Bootstrap4 设计实现
+              <span>Powered By: </span>
+              {['React', 'Bootstrap', 'Typescript', 'Koa'].map(e => <Badge color="secondary" className="m-1">{e}</Badge>)}
               <br />
               <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github</a>
               <br />

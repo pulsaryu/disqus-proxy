@@ -1,30 +1,11 @@
 import React from 'react';
 import DisqusProxy from './DisqusProxy';
+import { iNetworkWrapperStates } from './Interfaces';
+import { config } from './Config';
 
-const { username, debug } = window.disqusProxy;
+const { username, debug } = config.disqusProxy;
 
-declare global {
-  interface Window {
-    disqusProxy: {
-      username: string,
-      server: string,
-      port: number,
-      protocol: string,
-      defaultAvatar: string,
-      adminAvatar: string,
-      identifier: string,
-      debug: boolean,
-    }
-  }
-}
-
-interface NetworkWrapperStates {
-  disqusLoaded: boolean;
-  disqusType: string;
-}
-
-
-export class NetworkWrapper extends React.Component<{}, NetworkWrapperStates> {
+export class NetworkWrapper extends React.Component<{}, iNetworkWrapperStates> {
   constructor(props: any, context?: any) {
     super(props, context);
     this.state = {
@@ -63,9 +44,6 @@ export class NetworkWrapper extends React.Component<{}, NetworkWrapperStates> {
 
   render() {
     const { disqusLoaded, disqusType } = this.state;
-    if (debug) {
-      console.log(this.state);
-    }
 
     return (
       <div className="App">
