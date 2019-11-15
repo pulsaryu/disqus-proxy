@@ -1,27 +1,29 @@
 import React from 'react';
 import moment from 'moment';
-import { Row, Col, Card, CardBody, Badge, CardHeader, Button, ButtonToolbar, ButtonGroup } from 'reactstrap';
-import { iCommentTreeStates, iCommentTreeProps, iComment, iCommentBoxStates } from './Interfaces'
+import {
+  Row, Col, Card, CardBody, Badge, CardHeader, Button, ButtonToolbar, ButtonGroup,
+} from 'reactstrap';
+import {
+  iCommentTreeStates, iCommentTreeProps, iComment, iCommentBoxStates,
+} from './Interfaces';
 
 const pageLength = 20; /* disqus API will return 100 comments at most */
 
 class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates> {
-
   constructor(props: any, context?: any) {
-    super(props, context)
+    super(props, context);
     this.state = {
       arrangedComments: [],
       currentPage: 1,
-    }
+    };
 
     this.replyToComment = this.replyToComment.bind(this);
-
   }
 
   componentDidMount() {
     const { comments } = this.props;
     if (comments && comments.response.length > 0) {
-      for (var i = 0; i < comments.response.length; i++) {
+      for (let i = 0; i < comments.response.length; i++) {
         if (comments.response[i].parent == null) {
           /* loop for first level comments */
           this.createCommentElem(comments.response[i], i, -1, 0);
@@ -39,12 +41,12 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
       arrangedComments.push({
         ...commentObj,
         level,
-        parentCommentObj: comments.response[parentPostID]
-      })
+        parentCommentObj: comments.response[parentPostID],
+      });
 
-      this.setState({ arrangedComments: arrangedComments });
+      this.setState({ arrangedComments });
 
-      for (var i = 0; i < comments.response.length; i++) {
+      for (let i = 0; i < comments.response.length; i++) {
         if (comments.response[i].parent == comments.response[thisPostID].id) {
           this.createCommentElem(comments.response[i], i, thisPostID, level + 1);
         }
@@ -54,8 +56,8 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
 
   pageOnClick(e: any) {
     this.setState({
-      currentPage: e.target.getAttribute('page')
-    })
+      currentPage: e.target.getAttribute('page'),
+    });
   }
 
   replyToComment(e: any) {
@@ -66,36 +68,36 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
 
   render() {
     const { currentPage } = this.state;
-    let arrCommentsElem = [];
+    const arrCommentsElem = [];
 
     if (this.state.arrangedComments && this.state.arrangedComments.length > 0) {
       for (let i = (currentPage - 1) * pageLength; (i < currentPage * pageLength) && (i < this.state.arrangedComments.length); i++) {
-        let commentObj = this.state.arrangedComments[i];
-        let parentCommentObj = commentObj.parentCommentObj;
+        const commentObj = this.state.arrangedComments[i];
+        const { parentCommentObj } = commentObj;
         arrCommentsElem.push(
           <Row key={commentObj.id}>
             <Col>
-              <Card className="mt-2" size="sm" style={{ 'marginLeft': 30 * commentObj.level + 'px' }}>
+              <Card className="mt-2" size="sm" style={{ marginLeft: `${30 * commentObj.level}px` }}>
                 <CardHeader className="p-1">
                   <Badge color="primary">{commentObj.author.name}</Badge>
                   {
                     (parentCommentObj != null)
-                    &&
-                    [
+                    && [
                       <i className="fa fa-angle-right p-1" aria-hidden="true" key={commentObj.id} />,
                       <Badge color="primary">
                         {parentCommentObj.author.name}
-                      </Badge>
+                      </Badge>,
                     ]
                   }
 
-                  <span className="font-weight-bold">
-                  </span>
+                  <span className="font-weight-bold" />
                   <span className="pl-1">
-                    - <Badge color="secondary">{moment(commentObj.createdAt).format('YYYY-MM-DD')}</Badge>
+                    -
+                    {' '}
+                    <Badge color="secondary">{moment(commentObj.createdAt).format('YYYY-MM-DD')}</Badge>
                   </span>
                   <span>
-                    <Button size="sm" color="link" className="pull-right" style={{ 'lineHeight': 1 }} index={i} onClick={this.replyToComment.bind(this)}>回复</Button>
+                    <Button size="sm" color="link" className="pull-right" style={{ lineHeight: 1 }} index={i} onClick={this.replyToComment.bind(this)}>回复</Button>
                   </span>
                 </CardHeader>
                 <CardBody className="p-1">
@@ -110,23 +112,23 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
                 </CardBody>
               </Card>
             </Col>
-          </Row>
-        )
+          </Row>,
+        );
       }
-      let buttonGroup = [];
+      const buttonGroup = [];
 
       if (this.state.arrangedComments.length > pageLength) {
-        let previousBtnProp: any = {};
-        let nextBtnProp: any = {};
+        const previousBtnProp: any = {};
+        const nextBtnProp: any = {};
 
-        if (currentPage == 1) previousBtnProp['disabled'] = true;
-        if (currentPage == (Math.floor(this.state.arrangedComments.length / pageLength) + 1)) nextBtnProp['disabled'] = true;
+        if (currentPage == 1) previousBtnProp.disabled = true;
+        if (currentPage == (Math.floor(this.state.arrangedComments.length / pageLength) + 1)) nextBtnProp.disabled = true;
 
-        buttonGroup.push(<Button size="sm" color="toolbar" key="0" page={currentPage - 1} {...previousBtnProp} onClick={this.pageOnClick.bind(this)}>{'<'}</Button>)
+        buttonGroup.push(<Button size="sm" color="toolbar" key="0" page={currentPage - 1} {...previousBtnProp} onClick={this.pageOnClick.bind(this)}>{'<'}</Button>);
         for (let i = 1; i <= (this.state.arrangedComments.length / pageLength + 1); i++) {
           buttonGroup.push(<Button size="sm" page={i} key={i} color={(currentPage == i) ? 'primary' : 'toolbar'} onClick={this.pageOnClick.bind(this)}>{i}</Button>);
         }
-        buttonGroup.push(<Button size="sm" color="toolbar" key="-1" page={currentPage + 1} {...nextBtnProp} onClick={this.pageOnClick.bind(this)}>{'>'}</Button>)
+        buttonGroup.push(<Button size="sm" color="toolbar" key="-1" page={currentPage + 1} {...nextBtnProp} onClick={this.pageOnClick.bind(this)}>{'>'}</Button>);
       }
 
       arrCommentsElem.push(
@@ -134,10 +136,15 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
           <Col>
             {
               (this.state.arrangedComments.length <= pageLength)
-              &&
+              && (
               <span className="pl-1">
-                总计 {this.state.arrangedComments.length} 条评论,
-              </span>
+                总计
+                {' '}
+                {this.state.arrangedComments.length}
+                {' '}
+条评论,
+                            </span>
+              )
             }
             {
               (this.state.arrangedComments.length > pageLength)
@@ -154,15 +161,15 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
               </ButtonToolbar>
             </span>
           </Col>
-        </Row>
-      )
+        </Row>,
+      );
     } else {
       arrCommentsElem.push(
         <Row>
           <Col>
             这篇文章暂时没有人评论, 欢迎评论。
           </Col>
-        </Row>
+        </Row>,
       );
     }
 

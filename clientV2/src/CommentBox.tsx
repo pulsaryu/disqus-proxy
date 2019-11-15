@@ -1,6 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, CardBody, Badge, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button } from 'reactstrap';
-import { iCommentBoxStates, iCommentBoxProps } from './Interfaces'
+import {
+  Row, Col, Card, CardBody, Badge, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
+} from 'reactstrap';
+import { iCommentBoxStates, iCommentBoxProps } from './Interfaces';
 import { config } from './Config';
 
 const { server, port, protocol } = config.disqusProxy;
@@ -16,7 +18,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       content: '',
       msg: '',
       modalType: '',
-    }
+    };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -25,7 +27,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
   }
 
   inputOnChange(e: any) {
-    let newState: any = {};
+    const newState: any = {};
     newState[e.target.name] = e.target.value;
     this.setState(newState);
   }
@@ -40,7 +42,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
   hideModal(e: any) {
     this.setState({
       modalType: '',
-    })
+    });
   }
 
   postComment(e: any) {
@@ -65,21 +67,21 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     }
 
     const host = [
-      (protocol + '://' + server),
-      (port !== undefined ? (':' + port) : ''),
+      (`${protocol}://${server}`),
+      (port !== undefined ? (`:${port}`) : ''),
     ].join('');
 
     fetch(`${host}/api/createComment`, {
       method: 'POST',
       headers: {
-        "Content-Type": "application/json; charset=utf-8",
+        'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
         author_email: email,
         author_name: name,
         message: content,
         thread,
-        parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null
+        parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null,
       }),
     })
       .then((res) => res.json())
@@ -98,13 +100,13 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             msg: res.response,
           });
         }
-      })
-
-  };
+      });
+  }
 
   render() {
-
-    const { name, content, email, msg, modalType } = this.state;
+    const {
+      name, content, email, msg, modalType,
+    } = this.state;
     const { cancelOnClick } = this.props;
 
     return (
@@ -119,45 +121,49 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1 pt-2" size="small">
                 {
-                  (this.props.replyToCommentObj) &&
+                  (this.props.replyToCommentObj)
+                  && (
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText size="small">
-                      回复: {this.props.replyToCommentObj.author.name}
+                      回复:
+                      {' '}
+                      {this.props.replyToCommentObj.author.name}
                     </InputGroupText>
                   </InputGroupAddon>
+                  )
                 }
                 <Input type="text" placeholder="Your Name" className="" value={name} name="name" onChange={this.inputOnChange} />
                 <Input type="email" placeholder="Your Email" className="" value={email} name="email" onChange={this.inputOnChange} />
               </InputGroup>
               <Row className="m-0 p-0">
                 <Col className="d-flex m-0 p-1 border-0">
-                  <textarea className="form-control p-2 m-0" name="content" onChange={this.inputOnChange} value={content}></textarea>
+                  <textarea className="form-control p-2 m-0" name="content" onChange={this.inputOnChange} value={content} />
                 </Col>
               </Row>
             </CardBody>
             <div className="card-footer text-muted m-0 p-0 form-group">
 
-              <span className="small text-danger"></span>
+              <span className="small text-danger" />
               <button type="button" className="comment-btn btn btn-primary btn-sm pull-right m-1" onClick={this.postComment}>Post</button>
               {
                 (this.props.replyToCommentObj)
-                &&
-                <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</button>
+                && <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</button>
               }
             </div>
           </Card>
           {
             (msg.length > 0)
-            &&
+            && (
             <Alert color="primary" className="small p-2">
               {msg}
             </Alert>
-          }
+            )
+}
           <Modal isOpen={modalType === 'about'}>
             <ModalHeader>Disqus Proxy</ModalHeader>
             <ModalBody>
               <span>Powered By: </span>
-              {['React', 'Bootstrap', 'Typescript', 'Koa'].map(e => <Badge color="secondary" className="m-1">{e}</Badge>)}
+              {['React', 'Bootstrap', 'Typescript', 'Koa'].map((e) => <Badge color="secondary" className="m-1">{e}</Badge>)}
               <br />
               <a target="_blank" rel="noopener noreferrer" href="https://github.com/szhielelp/disqus-proxy">Github</a>
               <br />
@@ -169,9 +175,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
           </Modal>
           <Modal isOpen={modalType === 'management'}>
             <ModalHeader>Management</ModalHeader>
-            <ModalBody>
-
-            </ModalBody>
+            <ModalBody />
             <ModalFooter>
               <Button color="secondary" onClick={this.hideModal}>Close</Button>
             </ModalFooter>

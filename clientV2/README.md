@@ -37,12 +37,14 @@
 ## Debug
 
 ```
-yarn start
+npm install
+
+npm start
 ```
 
 #### Build
 
 ```
-yarn build
+npm build
 ```
 

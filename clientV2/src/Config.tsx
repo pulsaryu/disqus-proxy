@@ -11,6 +11,6 @@ interface iConfig extends Window {
   }
 }
 
-declare var window: iConfig;
+declare const window: iConfig;
 
 export const config = window;

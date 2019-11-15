@@ -14,7 +14,8 @@
     "react-dom": "^16.11.0",
     "react-render-html": "^0.6.0",
     "react-scripts": "3.2.0",
-    "typescript": "3.7.2"
+    "reactstrap": "^8.1.1",
+    "typescript": "^3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
