@@ -47,12 +47,14 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     });
   }
 
-  postComment = (): void => {
+  postComment = async (e: any) => {
+    e.persist(); /* keep event from event pool, otherwise we cannot access event after async  */
+    e.target.disabled = true;
     const { email, name, content } = this.state;
     const { thread, replyToCommentObj } = this.props;
 
     /* validation */
-    const regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let msg = '';
     if (content.trim().length === 0) {
       msg = 'Content is blank';
@@ -65,6 +67,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       this.setState({
         msg,
       });
+      e.target.disabled = false;
       return;
     }
 
@@ -73,14 +76,14 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       (port !== undefined ? (`:${port}`) : ''),
     ].join('');
 
-    fetch(`${host}/api/createComment`, {
+    await fetch(`${host}/api/createComment`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
-        authorEmail: email,
-        authorName: name,
+        author_email: email,
+        author_name: name,
         message: content,
         thread,
         parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null,
@@ -95,14 +98,20 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             name: '',
             email: '',
             content: '',
-            msg: '评论成功, 请等待审核...',
+            msg: 'Success, pending approval from Szhshp...',
           });
         } else {
           this.setState({
             msg: res.response,
           });
         }
+      })
+      .catch(() => {
+        this.setState({
+          msg: 'Error occured, please refresh and try again...',
+        });
       });
+    e.target.disabled = undefined;
   }
 
   render = (): JSX.Element => {
