@@ -14,6 +14,7 @@ export interface iDisqusProxyStates {
   commentsLoaded: boolean;
   replyCommentObj: undefined | iComment; /* new comment or reply to existed comment */
   thread: undefined; /* specify which thread id to reply to  */
+  msg: string;
 }
 
 export interface iNetworkWrapperStates {
@@ -30,6 +31,7 @@ export interface iCommentBoxStates {
   content: string;
   msg: string;
   modalType: string;
+  showEmojiPicker: boolean;
 }
 
 export interface iCommentBoxProps {

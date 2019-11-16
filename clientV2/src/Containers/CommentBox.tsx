@@ -1,10 +1,12 @@
 import React from 'react';
+import { Picker, EmojiData } from 'emoji-mart';
 import {
   Row, Col, Card, CardBody, Badge, InputGroup, Modal,
-  ModalHeader, ModalBody, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
+  ModalHeader, ModalBody, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button, Tooltip,
 } from 'reactstrap';
 import { iCommentBoxStates, iCommentBoxProps } from '../Interfaces/Interfaces';
 import { config } from '../Interfaces/Config';
+import 'emoji-mart/css/emoji-mart.css';
 
 const { server, port, protocol } = config.disqusProxy;
 
@@ -19,12 +21,14 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       content: '',
       msg: '',
       modalType: '',
+      showEmojiPicker: false,
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.inputOnChange = this.inputOnChange.bind(this);
     this.postComment = this.postComment.bind(this);
+    this.toggleEmojiPicker = this.toggleEmojiPicker.bind(this);
   }
 
   inputOnChange = (e: any): void => {
@@ -33,6 +37,15 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     newState[target.name] = target.value;
     this.setState(newState);
   }
+
+  toggleEmojiPicker = (): void => {
+    const { showEmojiPicker } = this.state;
+
+    this.setState({
+      showEmojiPicker: !showEmojiPicker,
+    });
+  }
+
 
   toggleModal = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const pageName: string | null = (e.target as HTMLInputElement).getAttribute('pageName');
@@ -117,7 +130,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
 
   render = (): JSX.Element => {
     const {
-      name, content, email, msg, modalType,
+      name, content, email, msg, modalType, showEmojiPicker,
     } = this.state;
     const { cancelOnClick, replyToCommentObj } = this.props;
     const closeBtn = <button className="close" onClick={this.hideModal}>&times;</button>;
@@ -153,14 +166,30 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
                 </Col>
               </Row>
             </CardBody>
-            <div className="card-footer text-muted m-0 p-0 form-group">
+            <div className="card-footer text-muted m-0 p-0 form-group d-flex flex-row-reverse position-relative">
 
               <span className="small text-danger" />
-              <button type="button" className="comment-btn btn btn-primary btn-sm pull-right m-1" onClick={this.postComment}>Post</button>
               {
                 (replyToCommentObj)
-                && <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</button>
+                && <Button className="btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</Button>
               }
+              <Button color="primary" size="sm" className="m-1" onClick={this.postComment}>Post</Button>
+              <Button color="light" size="sm" className="pull-right m-1" onClick={this.toggleEmojiPicker}><span role="img" aria-label="add Emoji">😀</span></Button>
+              {
+                showEmojiPicker
+                && (
+                  <span className="position-absolute mt-5">
+                    <Picker
+                      set="google"
+                      onSelect={(e: any): void => {
+                        this.setState({
+                          content: content + e.native,
+                        });
+                      }}
+                    />
+                  </span>
+                )
+}
             </div>
           </Card>
           {

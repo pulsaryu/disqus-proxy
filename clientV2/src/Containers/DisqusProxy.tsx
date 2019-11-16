@@ -13,6 +13,7 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
       commentsLoaded: false,
       replyCommentObj: undefined,
       thread: undefined,
+      msg: 'Loading...',
     };
     this.toggleReplyMode = this.toggleReplyMode.bind(this);
     this.cancelReply = this.cancelReply.bind(this);
@@ -45,6 +46,9 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
       .then((res) => res.json())
       .then((res) => this.setState({
         thread: res.response[0].id,
+      }))
+      .catch(() => this.setState({
+        msg: 'Load Failed',
       }));
   }
 
@@ -60,15 +64,12 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
 
   render = (): JSX.Element => {
     const {
-      thread, replyCommentObj, commentsLoaded, comments,
+      thread, replyCommentObj, commentsLoaded, comments, msg,
     } = this.state;
 
     return (
       <div className="p-1">
-        {
-          (commentsLoaded === true)
-          && <CommentBox replyToCommentObj={replyCommentObj} cancelOnClick={this.cancelReply} thread={thread} />
-        }
+        <CommentBox replyToCommentObj={replyCommentObj} cancelOnClick={this.cancelReply} thread={thread} />
         {
           (commentsLoaded === true)
           && <CommentTree comments={comments} replyOnClick={this.toggleReplyMode} />
@@ -77,7 +78,7 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
           (commentsLoaded === false)
           && (
             <Row>
-              <Col>Loading...</Col>
+              <Col>{msg}</Col>
             </Row>
           )
         }
