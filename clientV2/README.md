@@ -14,10 +14,14 @@
 
     <script>
       window.disqusProxy = {
-        username:'szhshp',  // 你的 Disqus username
-        server: 'xxx.xx.xxx.xx', // 你的 VPS IP
-        port: 5000, // 服务端对应的端口, 如果没有端口那么就忽略这个 Attr
-        https: true, 
+        
+
+        username: 'szhshp',  // 你的 Disqus username
+        server: 'xxx.xx.xxx.xx', // 部署了的 server 的 IP
+        protocol: 'http', 
+        port: 5050,
+        defaultAvatar: '/img/default-avatar.png', // 默认头像
+        adminAvatar: 'http://comic.szhshp.org/comic/10101/headshot/0 (2).png', // 管理员头像
         identifier: window.location.href // 页面 identifier, 一般就是页面 url
       };
       window.disqus_config = function () {

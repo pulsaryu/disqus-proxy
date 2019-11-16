@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Row, Col, Card, CardBody, Badge, InputGroup, Modal,
-  ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
+  ModalHeader, ModalBody, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
 } from 'reactstrap';
 import { iCommentBoxStates, iCommentBoxProps } from '../Interfaces/Interfaces';
 import { config } from '../Interfaces/Config';
@@ -47,6 +47,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       modalType: '',
     });
   }
+
 
   postComment = async (e: any) => {
     e.persist(); /* keep event from event pool, otherwise we cannot access event after async  */
@@ -120,6 +121,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       name, content, email, msg, modalType,
     } = this.state;
     const { cancelOnClick, replyToCommentObj } = this.props;
+    const closeBtn = <button className="close" onClick={this.hideModal}>&times;</button>;
 
     return (
       <Row>
@@ -127,8 +129,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
           <Card>
             <CardHeader className="card-header d-flex justify-content-between p-1">
               <div style={{ fontSize: '1rem' }} className="mr-auto">留言板</div>
-              <Button color="link" className="p-0" pageName="about" onClick={this.toggleModal}>关于</Button>
-              <Button color="link" className="p-0" pageName="management" onClick={this.toggleModal}>管理</Button>
+              <Button color="link" className="p-0 mr-1" pageName="about" onClick={this.toggleModal}>关于</Button>
             </CardHeader>
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1 pt-2" size="small">
@@ -172,7 +173,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             )
           }
           <Modal isOpen={modalType === 'about'} size="lg">
-            <ModalHeader>Disqus Proxy</ModalHeader>
+            <ModalHeader close={closeBtn}>Disqus Proxy</ModalHeader>
             <ModalBody>
               <span>Powered By: </span>
               {['React', 'Bootstrap', 'Typescript', 'Koa'].map((e) => <Badge color="secondary" className="m-1">{e}</Badge>)}
@@ -181,18 +182,6 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
               <br />
               <a target="_blank" rel="noopener noreferrer" href="http://szhshp.org/tech/2018/09/16/disqusrebuild2.html">使用指导</a>
             </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.hideModal} size="sm">OK</Button>
-            </ModalFooter>
-          </Modal>
-          <Modal isOpen={modalType === 'management'}>
-            <ModalHeader>Management</ModalHeader>
-            <ModalBody>
-              <CommentManage />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="secondary" onClick={this.hideModal} size="sm">Close</Button>
-            </ModalFooter>
           </Modal>
         </Col>
       </Row>
