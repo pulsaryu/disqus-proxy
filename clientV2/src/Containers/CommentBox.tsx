@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { iCommentBoxStates, iCommentBoxProps } from '../Interfaces/Interfaces';
 import { config } from '../Interfaces/Config';
+import CommentManage from './CommentManage';
 
 const { server, port, protocol } = config.disqusProxy;
 
@@ -181,14 +182,16 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
               <a target="_blank" rel="noopener noreferrer" href="http://szhshp.org/tech/2018/09/16/disqusrebuild2.html">使用指导</a>
             </ModalBody>
             <ModalFooter>
-              <Button color="secondary" onClick={this.hideModal}>OK</Button>
+              <Button color="secondary" onClick={this.hideModal} size="sm">OK</Button>
             </ModalFooter>
           </Modal>
           <Modal isOpen={modalType === 'management'}>
             <ModalHeader>Management</ModalHeader>
-            <ModalBody />
+            <ModalBody>
+              <CommentManage />
+            </ModalBody>
             <ModalFooter>
-              <Button color="secondary" onClick={this.hideModal}>Close</Button>
+              <Button color="secondary" onClick={this.hideModal} size="sm">Close</Button>
             </ModalFooter>
           </Modal>
         </Col>
