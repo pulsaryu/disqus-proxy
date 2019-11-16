@@ -4,32 +4,47 @@ import {
   Row, Col, Card, CardBody, Badge, CardHeader, Button, ButtonToolbar, ButtonGroup,
 } from 'reactstrap';
 import {
-  iCommentTreeStates, iCommentTreeProps, iComment, iCommentBoxStates,
+  iCommentTreeStates, iCommentTreeProps, iComment,
 } from './Interfaces';
 
 const pageLength = 20; /* disqus API will return 100 comments at most */
 
 class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates> {
-  constructor(props: any, context?: any) {
+  constructor(props: iCommentTreeProps, context: any) {
     super(props, context);
+
     this.state = {
       arrangedComments: [],
       currentPage: 1,
     };
-
     this.replyToComment = this.replyToComment.bind(this);
+    this.pageOnClick = this.pageOnClick.bind(this);
   }
 
   componentDidMount() {
     const { comments } = this.props;
     if (comments && comments.response.length > 0) {
-      for (let i = 0; i < comments.response.length; i++) {
+      for (let i = 0; i < comments.response.length; i += 1) {
         if (comments.response[i].parent == null) {
           /* loop for first level comments */
           this.createCommentElem(comments.response[i], i, -1, 0);
         }
       }
     }
+  }
+
+  replyToComment = (e: any): void => {
+    const { arrangedComments } = this.state;
+    const { replyOnClick } = this.props;
+    const index = e.target.getAttribute('index');
+    const parentPostObj = arrangedComments[index];
+    replyOnClick(parentPostObj);
+  }
+
+  pageOnClick = (currentPage: number): void => {
+    this.setState({
+      currentPage,
+    });
   }
 
   /* Recursion: get child and add into array */
@@ -46,33 +61,22 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
 
       this.setState({ arrangedComments });
 
-      for (let i = 0; i < comments.response.length; i++) {
-        if (comments.response[i].parent == comments.response[thisPostID].id) {
+      for (let i = 0; i < comments.response.length; i += 1) {
+        if (+comments.response[i].parent === +comments.response[thisPostID].id) {
           this.createCommentElem(comments.response[i], i, thisPostID, level + 1);
         }
       }
     }
   }
 
-  pageOnClick(e: any) {
-    this.setState({
-      currentPage: e.target.getAttribute('page'),
-    });
-  }
 
-  replyToComment(e: any) {
-    const index = e.target.getAttribute('index');
-    const parentPostObj = this.state.arrangedComments[index];
-    this.props.replyOnClick(parentPostObj);
-  }
-
-  render() {
-    const { currentPage } = this.state;
+  render(): JSX.Element[] {
+    const { currentPage, arrangedComments } = this.state;
     const arrCommentsElem = [];
 
-    if (this.state.arrangedComments && this.state.arrangedComments.length > 0) {
-      for (let i = (currentPage - 1) * pageLength; (i < currentPage * pageLength) && (i < this.state.arrangedComments.length); i++) {
-        const commentObj = this.state.arrangedComments[i];
+    if (arrangedComments && arrangedComments.length > 0) {
+      for (let i = (currentPage - 1) * pageLength; (i < currentPage * pageLength) && (i < arrangedComments.length); i += 1) {
+        const commentObj = arrangedComments[i];
         const { parentCommentObj } = commentObj;
         arrCommentsElem.push(
           <Row key={commentObj.id}>
@@ -97,7 +101,7 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
                     <Badge color="secondary">{moment(commentObj.createdAt).format('YYYY-MM-DD')}</Badge>
                   </span>
                   <span>
-                    <Button size="sm" color="link" className="pull-right" style={{ lineHeight: 1 }} index={i} onClick={this.replyToComment.bind(this)}>回复</Button>
+                    <Button size="sm" color="link" className="pull-right" style={{ lineHeight: 1 }} index={i} onClick={this.replyToComment}>回复</Button>
                   </span>
                 </CardHeader>
                 <CardBody className="p-1">
@@ -117,41 +121,51 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
       }
       const buttonGroup = [];
 
-      if (this.state.arrangedComments.length > pageLength) {
-        const previousBtnProp: any = {};
-        const nextBtnProp: any = {};
+      if (arrangedComments.length > pageLength) {
+        const isFirstPage = !!(currentPage === 1);
+        const isLastPage = !!(currentPage === (Math.floor(arrangedComments.length / pageLength) + 1));
 
-        if (currentPage == 1) previousBtnProp.disabled = true;
-        if (currentPage == (Math.floor(this.state.arrangedComments.length / pageLength) + 1)) nextBtnProp.disabled = true;
-
-        buttonGroup.push(<Button size="sm" color="toolbar" key="0" page={currentPage - 1} {...previousBtnProp} onClick={this.pageOnClick.bind(this)}>{'<'}</Button>);
-        for (let i = 1; i <= (this.state.arrangedComments.length / pageLength + 1); i++) {
-          buttonGroup.push(<Button size="sm" page={i} key={i} color={(currentPage == i) ? 'primary' : 'toolbar'} onClick={this.pageOnClick.bind(this)}>{i}</Button>);
+        buttonGroup.push(<Button size="sm" color="toolbar" key="0" disabled={isFirstPage} onClick={(): void => this.pageOnClick(currentPage - 1)}>{'<'}</Button>);
+        for (let i = 1; i <= (arrangedComments.length / pageLength + 1); i += 1) {
+          buttonGroup.push(<Button size="sm" key={i} color={(currentPage === i) ? 'primary' : 'toolbar'} onClick={(): void => this.pageOnClick(i)}>{i}</Button>);
         }
-        buttonGroup.push(<Button size="sm" color="toolbar" key="-1" page={currentPage + 1} {...nextBtnProp} onClick={this.pageOnClick.bind(this)}>{'>'}</Button>);
+        buttonGroup.push(<Button size="sm" color="toolbar" key="-1" disabled={isLastPage} onClick={(): void => this.pageOnClick(currentPage + 1)}>{'>'}</Button>);
       }
 
       arrCommentsElem.push(
         <Row className="pt-3">
           <Col>
             {
-              (this.state.arrangedComments.length <= pageLength)
+              (arrangedComments.length <= pageLength)
               && (
-              <span className="pl-1">
-                总计
-                {' '}
-                {this.state.arrangedComments.length}
-                {' '}
-条评论,
-                            </span>
+                <span className="pl-1">
+                  总计
+                  {' '}
+                  {arrangedComments.length}
+                  {' '}
+                  条评论,
+                </span>
               )
             }
             {
-              (this.state.arrangedComments.length > pageLength)
-              &&
-              <span className="pl-1">
-                总计 {this.state.arrangedComments.length} 条评论, 显示 {(currentPage - 1) * pageLength + 1} - {Math.min(currentPage * pageLength, this.state.arrangedComments.length)} 条评论
-              </span>
+              (arrangedComments.length > pageLength)
+              && (
+                <span className="pl-1">
+                  总计
+                  {' '}
+                  {arrangedComments.length}
+                  {' '}
+                  条评论, 显示
+                  {' '}
+                  {(currentPage - 1) * pageLength + 1}
+                  {' '}
+                  -
+                  {' '}
+                  {Math.min(currentPage * pageLength, arrangedComments.length)}
+                  {' '}
+                  条评论
+                </span>
+              )
             }
             <span className="pull-right">
               <ButtonToolbar>

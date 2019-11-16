@@ -5,10 +5,10 @@ export interface iComment {
 }
 
 export interface iDisqusProxyStates {
-  comments: undefined | iComment,
-  commentsLoaded: boolean,
-  replyCommentObj: undefined | iReplyCommentObj, /* new comment or reply to existed comment */
-  thread: undefined, /* specify which thread id to reply to  */
+  comments: undefined | iComment;
+  commentsLoaded: boolean;
+  replyCommentObj: undefined | iReplyCommentObj; /* new comment or reply to existed comment */
+  thread: undefined; /* specify which thread id to reply to  */
 }
 
 export interface iNetworkWrapperStates {
@@ -26,13 +26,13 @@ export interface iReplyCommentObj {
 }
 
 export interface iCommentBoxStates {
-  comments: string,
-  commentsLoaded: boolean,
-  name: string,
-  email: string,
-  content: string,
-  msg: string,
-  modalType: string,
+  comments: string;
+  commentsLoaded: boolean;
+  name: string;
+  email: string;
+  content: string;
+  msg: string;
+  modalType: string;
 }
 
 export interface iCommentBoxProps {
@@ -42,11 +42,11 @@ export interface iCommentBoxProps {
 }
 
 export interface iCommentTreeStates {
-  arrangedComments: any[],
-  currentPage: number,
+  arrangedComments: any[];
+  currentPage: number;
 }
 
 export interface iCommentTreeProps {
-  comments: undefined | iComment,
-  replyOnClick(replyCommentObj: undefined | iReplyCommentObj): void,
+  comments: undefined | iComment;
+  replyOnClick(replyCommentObj: undefined | iReplyCommentObj): void;
 }
