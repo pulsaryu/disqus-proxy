@@ -5,7 +5,6 @@ import {
 } from 'reactstrap';
 import { iCommentBoxStates, iCommentBoxProps } from '../Interfaces/Interfaces';
 import { config } from '../Interfaces/Config';
-import CommentManage from './CommentManage';
 
 const { server, port, protocol } = config.disqusProxy;
 
