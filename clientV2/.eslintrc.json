@@ -26,6 +26,9 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "@typescript-eslint/class-name-casing": 0,
+        "import/prefer-default-export": 1,
+        "max-len": 1,
         "react/jsx-filename-extension": [
             1,
             {

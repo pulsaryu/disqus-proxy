@@ -36,7 +36,7 @@ export interface iCommentBoxStates {
 }
 
 export interface iCommentBoxProps {
-  cancelOnClick: any;
+  cancelOnClick(): void;
   thread: undefined | string;
   replyToCommentObj: any;
 }

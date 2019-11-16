@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  Row, Col, Card, CardBody, Badge, InputGroup, Modal, ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
+  Row, Col, Card, CardBody, Badge, InputGroup, Modal,
+  ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
 } from 'reactstrap';
 import { iCommentBoxStates, iCommentBoxProps } from './Interfaces';
 import { config } from './Config';
@@ -8,7 +9,7 @@ import { config } from './Config';
 const { server, port, protocol } = config.disqusProxy;
 
 export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxStates> {
-  constructor(props: any, context?: any) {
+  constructor(props: iCommentBoxProps, context?: any) {
     super(props, context);
     this.state = {
       comments: '',
@@ -26,35 +27,36 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     this.postComment = this.postComment.bind(this);
   }
 
-  inputOnChange(e: any) {
-    const newState: any = {};
-    newState[e.target.name] = e.target.value;
+  inputOnChange = (e: any): void => {
+    const newState: any = { ...this.state };
+    const target = e.currentTarget as HTMLInputElement;
+    newState[target.name] = target.value;
     this.setState(newState);
   }
 
-  toggleModal(e: any) {
-    const pageName: string = e.target.getAttribute('pageName');
+  toggleModal = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    const pageName: string | null = (e.target as HTMLInputElement).getAttribute('pageName');
     this.setState({
-      modalType: pageName,
+      modalType: (pageName === null) ? '' : pageName,
     });
   }
 
-  hideModal(e: any) {
+  hideModal = (): void => {
     this.setState({
       modalType: '',
     });
   }
 
-  postComment(e: any) {
+  postComment = (): void => {
     const { email, name, content } = this.state;
     const { thread, replyToCommentObj } = this.props;
 
     /* validation */
-    const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    const regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let msg = '';
-    if (content.trim().length == 0) {
+    if (content.trim().length === 0) {
       msg = 'Content is blank';
-    } else if (name.length == 0) {
+    } else if (name.length === 0) {
       msg = 'Invalid Name';
     } else if (!regex.test(email)) {
       msg = 'Invalid Email';
@@ -77,8 +79,8 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
         'Content-Type': 'application/json; charset=utf-8',
       },
       body: JSON.stringify({
-        author_email: email,
-        author_name: name,
+        authorEmail: email,
+        authorName: name,
         message: content,
         thread,
         parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null,
@@ -86,7 +88,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     })
       .then((res) => res.json())
       .then((res) => {
-        if (res.code == 0) {
+        if (res.code === 0) {
           this.setState({
             comments: '',
             commentsLoaded: false,
@@ -103,11 +105,11 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       });
   }
 
-  render() {
+  render = (): JSX.Element => {
     const {
       name, content, email, msg, modalType,
     } = this.state;
-    const { cancelOnClick } = this.props;
+    const { cancelOnClick, replyToCommentObj } = this.props;
 
     return (
       <Row>
@@ -121,15 +123,15 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1 pt-2" size="small">
                 {
-                  (this.props.replyToCommentObj)
+                  (replyToCommentObj)
                   && (
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText size="small">
-                      回复:
-                      {' '}
-                      {this.props.replyToCommentObj.author.name}
-                    </InputGroupText>
-                  </InputGroupAddon>
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText size="small">
+                        回复:
+                        {' '}
+                        {replyToCommentObj.author.name}
+                      </InputGroupText>
+                    </InputGroupAddon>
                   )
                 }
                 <Input type="text" placeholder="Your Name" className="" value={name} name="name" onChange={this.inputOnChange} />
@@ -146,7 +148,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
               <span className="small text-danger" />
               <button type="button" className="comment-btn btn btn-primary btn-sm pull-right m-1" onClick={this.postComment}>Post</button>
               {
-                (this.props.replyToCommentObj)
+                (replyToCommentObj)
                 && <button type="button" className="comment-btn btn btn-outline-secondary btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</button>
               }
             </div>
@@ -154,12 +156,12 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
           {
             (msg.length > 0)
             && (
-            <Alert color="primary" className="small p-2">
-              {msg}
-            </Alert>
+              <Alert color="primary" className="small p-2">
+                {msg}
+              </Alert>
             )
-}
-          <Modal isOpen={modalType === 'about'}>
+          }
+          <Modal isOpen={modalType === 'about'} size="lg">
             <ModalHeader>Disqus Proxy</ModalHeader>
             <ModalBody>
               <span>Powered By: </span>
