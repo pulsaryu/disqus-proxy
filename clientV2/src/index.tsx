@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import NetworkWrapper from './NetworkWrapper';
+import NetworkWrapper from './Containers/NetworkWrapper';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.css';
 

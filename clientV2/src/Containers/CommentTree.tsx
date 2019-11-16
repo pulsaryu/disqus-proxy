@@ -5,7 +5,7 @@ import {
 } from 'reactstrap';
 import {
   iCommentTreeStates, iCommentTreeProps, iComment,
-} from './Interfaces';
+} from '../Interfaces/Interfaces';
 
 const pageLength = 20; /* disqus API will return 100 comments at most */
 

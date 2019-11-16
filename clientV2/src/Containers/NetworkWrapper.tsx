@@ -1,7 +1,7 @@
 import React from 'react';
 import DisqusProxy from './DisqusProxy';
-import { iNetworkWrapperStates } from './Interfaces';
-import { config } from './Config';
+import { iNetworkWrapperStates } from '../Interfaces/Interfaces';
+import { config } from '../Interfaces/Config';
 
 const { username, debug } = config.disqusProxy;
 

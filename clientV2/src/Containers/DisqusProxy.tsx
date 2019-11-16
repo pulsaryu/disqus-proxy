@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col } from 'reactstrap';
 import CommentTree from './CommentTree';
 import CommentBox from './CommentBox';
-import { iDisqusProxyStates, iReplyCommentObj } from './Interfaces';
-import { config } from './Config';
+import { iDisqusProxyStates, iComment } from '../Interfaces/Interfaces';
+import { config } from '../Interfaces/Config';
 
 class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
   constructor(props: any, context?: any) {
@@ -48,7 +48,7 @@ class DisqusProxy extends React.Component<{}, iDisqusProxyStates> {
       }));
   }
 
-  toggleReplyMode = (replyCommentObj: undefined | iReplyCommentObj): void => {
+  toggleReplyMode = (replyCommentObj: undefined | iComment): void => {
     this.setState({
       replyCommentObj,
     });

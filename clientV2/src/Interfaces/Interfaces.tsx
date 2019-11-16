@@ -2,12 +2,17 @@ export interface iComment {
   response: iComment[];
   parent: number;
   id: number;
+  author: any;
+  level: number;
+  createdAt: string;
+  message: string;
+  parentCommentObj: iComment;
 }
 
 export interface iDisqusProxyStates {
   comments: undefined | iComment;
   commentsLoaded: boolean;
-  replyCommentObj: undefined | iReplyCommentObj; /* new comment or reply to existed comment */
+  replyCommentObj: undefined | iComment; /* new comment or reply to existed comment */
   thread: undefined; /* specify which thread id to reply to  */
 }
 
@@ -16,14 +21,6 @@ export interface iNetworkWrapperStates {
   disqusType: string;
 }
 
-interface iAuthor {
-  name: string;
-}
-
-export interface iReplyCommentObj {
-  id: number;
-  author: iAuthor;
-}
 
 export interface iCommentBoxStates {
   comments: string;
@@ -38,15 +35,15 @@ export interface iCommentBoxStates {
 export interface iCommentBoxProps {
   cancelOnClick(): void;
   thread: undefined | string;
-  replyToCommentObj: any;
+  replyToCommentObj: undefined | iComment;
 }
 
 export interface iCommentTreeStates {
-  arrangedComments: any[];
+  arrangedComments: iComment[];
   currentPage: number;
 }
 
 export interface iCommentTreeProps {
   comments: undefined | iComment;
-  replyOnClick(replyCommentObj: undefined | iReplyCommentObj): void;
+  replyOnClick(replyCommentObj: undefined | iComment): void;
 }

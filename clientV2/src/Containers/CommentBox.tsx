@@ -3,8 +3,8 @@ import {
   Row, Col, Card, CardBody, Badge, InputGroup, Modal,
   ModalHeader, ModalBody, ModalFooter, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button,
 } from 'reactstrap';
-import { iCommentBoxStates, iCommentBoxProps } from './Interfaces';
-import { config } from './Config';
+import { iCommentBoxStates, iCommentBoxProps } from '../Interfaces/Interfaces';
+import { config } from '../Interfaces/Config';
 
 const { server, port, protocol } = config.disqusProxy;
 
