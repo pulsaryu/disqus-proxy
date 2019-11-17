@@ -14,10 +14,7 @@ if (config.api_key === '' || config.api_secret === '') {
 
 log4js.configure({
   appenders: {
-    'disqus-proxy': {
-      type: 'file',
-      filename: 'disqusProxy.log'
-    }
+    'disqus-proxy': (config.logType === 'file') ? { type: 'file', filename: 'disqusProxy.log' } : { type: 'stdout' }
   },
   categories: {
     default: {
