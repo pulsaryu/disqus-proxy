@@ -28,10 +28,12 @@ export interface iCommentBoxStates {
   commentsLoaded: boolean;
   name: string;
   email: string;
-  content: string;
-  msg: string;
+  url: string;
+  message: string;
+  error: string;
   modalType: string;
   showEmojiPicker: boolean;
+  showNewFeature: boolean;
 }
 
 export interface iCommentBoxProps {

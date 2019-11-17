@@ -1,5 +1,5 @@
 import React from 'react';
-import { Picker, EmojiData } from 'emoji-mart';
+import { Picker } from 'emoji-mart';
 import {
   Row, Col, Card, CardBody, Badge, InputGroup, Modal,
   ModalHeader, ModalBody, InputGroupAddon, InputGroupText, Alert, Input, CardHeader, Button, Tooltip,
@@ -18,18 +18,31 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       commentsLoaded: false,
       name: '',
       email: '',
-      content: '',
-      msg: '',
+      url: '',
+      message: '',
+      error: '',
       modalType: '',
       showEmojiPicker: false,
+      showNewFeature: false,
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-    this.hideModal = this.hideModal.bind(this);
-    this.inputOnChange = this.inputOnChange.bind(this);
-    this.postComment = this.postComment.bind(this);
-    this.toggleEmojiPicker = this.toggleEmojiPicker.bind(this);
   }
+
+  toggleNewFeature = (e: any): void => {
+    const { showNewFeature } = this.state;
+    this.setState({
+      showNewFeature: !showNewFeature,
+    });
+  }
+
+  componentDidMount = (): void => {
+    // show new feature until 2020
+    if (new Date().getFullYear() === 2019) {
+      this.setState({
+        showNewFeature: true,
+      });
+    }
+  }
+
 
   inputOnChange = (e: any): void => {
     const newState: any = { ...this.state };
@@ -46,7 +59,6 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     });
   }
 
-
   toggleModal = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const pageName: string | null = (e.target as HTMLInputElement).getAttribute('pageName');
     this.setState({
@@ -60,26 +72,27 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
     });
   }
 
-
   postComment = async (e: any) => {
     e.persist(); /* keep event from event pool, otherwise we cannot access event after async  */
     e.target.disabled = true;
-    const { email, name, content } = this.state;
+    const {
+      email, name, url, message,
+    } = this.state;
     const { thread, replyToCommentObj } = this.props;
 
     /* validation */
     const regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    let msg = '';
-    if (content.trim().length === 0) {
-      msg = 'Content is blank';
+    let error = '';
+    if (message.trim().length === 0) {
+      error = 'Message is blank';
     } else if (name.length === 0) {
-      msg = 'Invalid Name';
+      error = 'Invalid Name';
     } else if (!regex.test(email)) {
-      msg = 'Invalid Email';
+      error = 'Invalid Email';
     }
-    if (msg.length > 0) {
+    if (error.length > 0) {
       this.setState({
-        msg,
+        error,
       });
       e.target.disabled = false;
       return;
@@ -98,7 +111,8 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
       body: JSON.stringify({
         author_email: email,
         author_name: name,
-        message: content,
+        author_url: url,
+        message,
         thread,
         parent: (replyToCommentObj !== undefined) ? replyToCommentObj.id : null,
       }),
@@ -111,18 +125,18 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
             commentsLoaded: false,
             name: '',
             email: '',
-            content: '',
-            msg: 'Success, pending approval from Szhshp...',
+            message: '',
+            error: '评论成功, 等待审核...',
           });
         } else {
           this.setState({
-            msg: res.response,
+            error: res.response,
           });
         }
       })
       .catch(() => {
         this.setState({
-          msg: 'Error occured, please refresh and try again...',
+          error: '啊哈好像出错了, 刷新试试...',
         });
       });
     e.target.disabled = undefined;
@@ -130,7 +144,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
 
   render = (): JSX.Element => {
     const {
-      name, content, email, msg, modalType, showEmojiPicker,
+      name, message, email, url, error, modalType, showEmojiPicker, showNewFeature,
     } = this.state;
     const { cancelOnClick, replyToCommentObj } = this.props;
     const closeBtn = <button className="close" onClick={this.hideModal}>&times;</button>;
@@ -141,7 +155,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
           <Card>
             <CardHeader className="card-header d-flex justify-content-between p-1">
               <div style={{ fontSize: '1rem' }} className="mr-auto">留言板</div>
-              <Button color="link" className="p-0 mr-1" pageName="about" onClick={this.toggleModal}>关于</Button>
+              <Button color="url" className="p-0 mr-1 text-primary" pageName="about" onClick={this.toggleModal}>关于</Button>
             </CardHeader>
             <CardBody className="m-0 p-0">
               <InputGroup className="p-1 pt-2" size="small">
@@ -157,12 +171,13 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
                     </InputGroupAddon>
                   )
                 }
-                <Input type="text" placeholder="Your Name" className="" value={name} name="name" onChange={this.inputOnChange} />
-                <Input type="email" placeholder="Your Email" className="" value={email} name="email" onChange={this.inputOnChange} />
+                <Input type="text" placeholder="Name" className="" value={name} name="name" onChange={this.inputOnChange} />
+                <Input type="email" placeholder="Email" className="" value={email} name="email" onChange={this.inputOnChange} />
+                <Input type="url" placeholder="URL (Optional)" className="" value={url} name="url" onChange={this.inputOnChange} />
               </InputGroup>
               <Row className="m-0 p-0">
                 <Col className="d-flex m-0 p-1 border-0">
-                  <textarea className="form-control p-2 m-0" name="content" onChange={this.inputOnChange} value={content} />
+                  <textarea className="form-control p-2 m-0" name="message" onChange={this.inputOnChange} value={message} placeholder="Message" />
                 </Col>
               </Row>
             </CardBody>
@@ -171,32 +186,37 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
               <span className="small text-danger" />
               {
                 (replyToCommentObj)
-                && <Button className="btn-sm pull-right m-1" onClick={cancelOnClick}>Cancel</Button>
+                && <Button className="btn-sm m-1" onClick={cancelOnClick}>Cancel</Button>
               }
               <Button color="primary" size="sm" className="m-1" onClick={this.postComment}>Post</Button>
-              <Button color="light" size="sm" className="pull-right m-1" onClick={this.toggleEmojiPicker}><span role="img" aria-label="add Emoji">😀</span></Button>
+              <Button color="light" size="sm" className="m-1" onClick={this.toggleEmojiPicker} id="emoji">
+                <i className="fa fa-smile-o" />
+              </Button>
+              <Tooltip placement="top" isOpen={showNewFeature} autohide target="emoji" toggle={this.toggleNewFeature}>
+                New: Emoji Picker
+              </Tooltip>
               {
                 showEmojiPicker
                 && (
-                  <span className="position-absolute mt-5">
+                  <span className="position-absolute mt-5" style={{ zIndex: 1000 }}>
                     <Picker
                       set="google"
                       onSelect={(e: any): void => {
                         this.setState({
-                          content: content + e.native,
+                          message: message + e.native,
                         });
                       }}
                     />
                   </span>
                 )
-}
+              }
             </div>
           </Card>
           {
-            (msg.length > 0)
+            (error.length > 0)
             && (
-              <Alert color="primary" className="small p-2">
-                {msg}
+              <Alert color="danger" className="small p-2">
+                {error}
               </Alert>
             )
           }

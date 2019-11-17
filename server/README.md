@@ -1,18 +1,5 @@
 # Disqus-Proxy: Server
 
-## V2 - TODO
-
-- [x] 后端
-  - [x] Logger Refactory
-  - [x] 写一个 approve/spam 功能
-  - [x] 写一个 vote 功能
-  - [x] 整理一下 config 的详细
-  - [x] 整理一下 readme 里面的 config 的详细
-  - [x] Readme 最好全部整理一下
-- [ ] 前端
-  - [ ] 写一个管理页面
-  - [ ] 添加一下 Vote 功能
-
 ## API
 
 * 获取所有文章
@@ -101,7 +88,7 @@
 
     > 正常运行服务，关闭 ssh 的时候就会关闭服务器，因此可以考虑使用 forever 插件
 
-5. 让服务跟随服务器自动启动  
+4. 让服务跟随服务器自动启动  
 
 ## Debug
 

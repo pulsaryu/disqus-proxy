@@ -81,14 +81,14 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
         arrCommentsElem.push(
           <Row key={commentObj.id}>
             <Col>
-              <Card className="mt-2" size="sm" style={{ marginLeft: `${30 * commentObj.level}px` }}>
+              <Card className="mt-2" size="sm" style={{ marginLeft: `${commentObj.level}rem` }}>
                 <CardHeader className="p-1">
-                  <Badge color="primary">{commentObj.author.name}</Badge>
+                  <Badge color="primary" href={commentObj.author.url}>{commentObj.author.name}</Badge>
                   {
                     (parentCommentObj != null)
                     && [
                       <i className="fa fa-angle-right p-1" aria-hidden="true" key={commentObj.id} />,
-                      <Badge color="primary">
+                      <Badge color="primary" href={parentCommentObj.author.url}>
                         {parentCommentObj.author.name}
                       </Badge>,
                     ]
@@ -101,7 +101,7 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
                     <Badge color="secondary">{moment(commentObj.createdAt).format('YYYY-MM-DD')}</Badge>
                   </span>
                   <span>
-                    <Button size="sm" color="link" className="pull-right" style={{ lineHeight: 1 }} index={i} onClick={this.replyToComment}>回复</Button>
+                    <Button size="sm" color="link" className="float-right" style={{ lineHeight: 1 }} index={i} onClick={this.replyToComment}>回复</Button>
                   </span>
                 </CardHeader>
                 <CardBody className="p-1">
@@ -167,7 +167,7 @@ class CommentTree extends React.Component<iCommentTreeProps, iCommentTreeStates>
                 </span>
               )
             }
-            <span className="pull-right">
+            <span className="float-right">
               <ButtonToolbar>
                 <ButtonGroup>
                   {buttonGroup}
