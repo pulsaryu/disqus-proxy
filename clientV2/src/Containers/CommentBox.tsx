@@ -193,7 +193,7 @@ export class CommentBox extends React.Component<iCommentBoxProps, iCommentBoxSta
                 <i className="fa fa-smile-o" />
               </Button>
               <Tooltip placement="top" isOpen={showNewFeature} autohide target="emoji" toggle={this.toggleNewFeature}>
-                New: Emoji Picker
+                New! Try emoji here~
               </Tooltip>
               {
                 showEmojiPicker

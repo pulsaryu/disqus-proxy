@@ -2,7 +2,7 @@ interface iConfig extends Window {
   disqusProxy: {
     username: string;
     server: string;
-    port: number;
+    port: undefined | number;
     protocol: string;
     defaultAvatar: string;
     adminAvatar: string;
