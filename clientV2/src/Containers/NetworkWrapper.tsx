@@ -15,7 +15,6 @@ export class NetworkWrapper extends React.Component<{}, iNetworkWrapperStates> {
   }
 
   componentDidMount = (): void => {
-    let s = document.createElement('script');
     if (debug) {
       this.setState({
         disqusLoaded: true,
@@ -23,35 +22,39 @@ export class NetworkWrapper extends React.Component<{}, iNetworkWrapperStates> {
       });
       return;
     }
-    s = {
-      ...s,
-      src: `https://${username}.disqus.com/embed.js`,
-      async: true,
-      /* request for official disqus, if succeed then load native, otherwise load proxy version  */
-      onload: (): void => {
-        this.setState({ disqusType: 'native' });
-        console.log('Native Disqus.');
-      },
-      onerror: (): void => {
-        this.setState({ disqusType: 'proxy' });
-        console.log('Proxy Disqus');
-      },
-    };
-    s.setAttribute('data-timestamp', String(+new Date()));
+    let s = document.createElement('script');
+    s.src = `https://${username}.disqus.com/embed.js`
+    s.async = true
+    s.setAttribute('data-timestamp', String(+new Date()))
+    s.onload = () => {
+      this.setState({
+        disqusLoaded: true,
+        disqusType: 'native',
+      })
+      console.log('Native Disqus.')
+    }
+    s.onerror = () => {
+      this.setState({
+        disqusLoaded: true,
+        disqusType: 'proxy',
+      })
+      console.log('Proxy Disqus')
+    }
+
     document.body.appendChild(s);
   }
 
 
   render = (): JSX.Element => {
     const { disqusLoaded, disqusType } = this.state;
-
+    
     return (
       <div className="App">
         {
           (disqusLoaded === false)
           && (
-            <div>
-              <i className="fa fa-circle-o-notch fa-spin" />
+            <div className="m-3">
+              <i className="mr-2 fa fa-circle-o-notch fa-spin" />
               Loading Disqus...
             </div>
           )
