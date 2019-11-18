@@ -14,12 +14,10 @@
 
     <script>
       window.disqusProxy = {
-        
-
         username: 'szhshp',  // 你的 Disqus username
-        server: 'xxx.xx.xxx.xx', // 部署了的 server 的 IP
+        server: 'xxx.xx.xxx.xx', // 部署了的 server 的 IP 或者直接 host name
         protocol: 'http', 
-        port: 5050,
+        port: 5050, // 如果没有 port 就直接删掉这一行, 或者设为 undefined
         defaultAvatar: '/img/default-avatar.png', // 默认头像
         adminAvatar: 'http://comic.szhshp.org/comic/10101/headshot/0 (2).png', // 管理员头像
         identifier: window.location.href // 页面 identifier, 一般就是页面 url
