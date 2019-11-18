@@ -2,7 +2,7 @@
 
 ## Client Deployment
 
-首先将 `client/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件, 并且进行配置
+首先将 `/build/static` 文件夹 copy 到你的博客里面, 然后前端引用这些文件, 并且进行配置
 
 ```html
     <!-- 必须提供一个 id 完全相同的 div -->
@@ -27,7 +27,7 @@
         this.page.identifier = window.location.href;
       };
       var s = document.createElement('script');
-      s.src = '/static/js/main.09c31d67.js'; //引用 static 文件夹下面的 JS
+      s.src = '/static/js/main.09c31d67.js'; //引用 static 文件夹下面的 JS, 这里可能需要修改一下文件名, 因为每一次 build 有不同的 hash
       s.async = true;
       document.body.appendChild(s);
     </script>
