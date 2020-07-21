@@ -61,6 +61,10 @@ let sendRequest = async ({
   return result;
 }
 
+router.get('/', async (ctx) => {
+  ctx.body = "Hello Disqus!!"
+});
+
 router.get('/api/getThreads', async (ctx) => {
   ctx.body = await sendRequest({
     task: 'List threads',
