@@ -6,5 +6,6 @@ module.exports = {
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
   username: process.env.USERNAME,
+  access_token: process.env.ACCESS_TOKEN,
   testPage: ''
 };

@@ -114,8 +114,8 @@ router.post('/api/createComment', async (ctx) => {
     method: 'POST',
     url: 'https://disqus.com/api/3.0/posts/create.json',
     form: Object.assign(ctx.request.body, {
-      api_key: 'E8Uh5l5fHZ6gD8U3KycjAIAk46f68Zw7C6eW8WSjZvCLXebZ7p0r1yrYDrLilk2F',
-      /* fixed private key, for anonymous comments we will always use this key */
+      access_token: config.access_token,
+      api_key: config.api_key,
     }),
   });
 });
